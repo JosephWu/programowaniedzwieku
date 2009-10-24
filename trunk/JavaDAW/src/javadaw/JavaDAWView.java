@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 public class JavaDAWView extends FrameView {
 
     private JDAWEngine jDAWEngine;
+    private DeviceConfigurationGUI deviceConfigurationGUI;
 
     public JavaDAWView(SingleFrameApplication app) {
         super(app);
@@ -261,14 +262,16 @@ public class JavaDAWView extends FrameView {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        DeviceConfigurationGUI deviceConfigurationGUI = new DeviceConfigurationGUI(jDAWEngine);
-        for (int i = 0; i < this.jDAWEngine.deviceInfo.devices.size(); i++) {
-            deviceConfigurationGUI.getDevicesComboBox()
+        if(deviceConfigurationGUI == null) {
+            deviceConfigurationGUI = new DeviceConfigurationGUI(jDAWEngine);
+            for (int i = 0; i < this.jDAWEngine.deviceInfo.devices.size(); i++) {
+                deviceConfigurationGUI.getDevicesComboBox()
                     .addItem(this.jDAWEngine.deviceInfo.devices.get(i));
-        }
-        for (int i = 0; i < this.jDAWEngine.deviceInfo.drivers.size(); i++) {
-            deviceConfigurationGUI.getDriversComboBox()
+            }
+            for (int i = 0; i < this.jDAWEngine.deviceInfo.drivers.size(); i++) {
+                deviceConfigurationGUI.getDriversComboBox()
                     .addItem(this.jDAWEngine.deviceInfo.drivers.get(i));
+            }
         }
         deviceConfigurationGUI.setVisible(true);
 
