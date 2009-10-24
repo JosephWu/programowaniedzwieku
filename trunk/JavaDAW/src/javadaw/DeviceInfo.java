@@ -50,11 +50,33 @@ public class DeviceInfo {
     public HashMap<Integer, String> devices;
     public HashMap<Integer, String> drivers;
 
+    private int[] pluginHandles;
+
     public DeviceInfo(JavaDAWView javaDAWView) {
         this.javaDAWView = javaDAWView;
         this.system = new System();
         devices = new HashMap<Integer, String>();
         drivers = new HashMap<Integer, String>();
+    }
+
+    public void setDevice(int no) {
+        result = this.getSystem().setDriver(no);
+        SoundUtils.ErrorCheck(result);
+    }
+
+    public void setDriver(int no) {
+        int parsedNo = this.pluginHandles[no];
+        result = this.getSystem().setOutputByPlugin(parsedNo);
+        SoundUtils.ErrorCheck(result);
+        
+        // test, logowanie
+        ByteBuffer byteBuffer = BufferUtils.newByteBuffer(256);
+        ByteBuffer buffer2 = BufferUtils.newByteBuffer(256);
+        FMOD_PLUGINTYPE[] plugin_types = new FMOD_PLUGINTYPE[1];
+        this.result = this.getSystem().getPluginInfo(parsedNo, plugin_types, byteBuffer, byteBuffer.capacity(), buffer2.asIntBuffer());
+        SoundUtils.ErrorCheck(this.result);
+        String pluginName = BufferUtils.toString(byteBuffer);
+        this.javaDAWView.getOutputTextArea().append("Ustawiony sterownik: " + pluginName + "\r\n");
     }
 
     public void createSystem() {
@@ -70,24 +92,24 @@ public class DeviceInfo {
                     " vs. " + NATIVEFMODEX_JAR_VERSION);
         }
 
-        this.result = FmodEx.System_Create(this.system);
+        this.result = FmodEx.System_Create(this.getSystem());
         SoundUtils.ErrorCheck(this.result);
     }
 
     public void init() {
-        this.result = this.system.init(32, FMOD_INIT_NORMAL, null);
+        this.result = this.getSystem().init(32, FMOD_INIT_NORMAL, null);
         SoundUtils.ErrorCheck(this.result);
     }
 
     public void getDevices() {
         ByteBuffer buffer = BufferUtils.newByteBuffer(256);
-        this.system.getNumDrivers(buffer.asIntBuffer());
+        this.getSystem().getNumDrivers(buffer.asIntBuffer());
         int numberOfDrivers = buffer.getInt(0);
         FMOD_GUID guid = FMOD_GUID.create();
 
         for (int i = 0; i < numberOfDrivers; i++) {
             ByteBuffer byteBuffer = BufferUtils.newByteBuffer(256);
-            this.result = this.system.getDriverInfo(i, byteBuffer, byteBuffer.capacity(), guid);
+            this.result = this.getSystem().getDriverInfo(i, byteBuffer, byteBuffer.capacity(), guid);
             SoundUtils.ErrorCheck(this.result);
             String driverName = BufferUtils.toString(byteBuffer);
             this.javaDAWView.getOutputTextArea().append(i + ": " + driverName + "\r\n");
@@ -99,22 +121,32 @@ public class DeviceInfo {
         ByteBuffer buffer = BufferUtils.newByteBuffer(256);
         ByteBuffer buffer2 = BufferUtils.newByteBuffer(256);
 
-        this.result = this.system.getNumPlugins(FMOD_PLUGINTYPE_OUTPUT, buffer.asIntBuffer());
+        this.result = this.getSystem().getNumPlugins(FMOD_PLUGINTYPE_OUTPUT, buffer.asIntBuffer());
         SoundUtils.ErrorCheck(this.result);
         int count = buffer.getInt(0);
+        this.pluginHandles = new int[count];
         for (int i = 0; i < count; i++) {
-            this.result = this.system.getPluginHandle(FMOD_PLUGINTYPE_OUTPUT, i, buffer.asIntBuffer());
+            this.result = this.getSystem().getPluginHandle(FMOD_PLUGINTYPE_OUTPUT, i, buffer.asIntBuffer());
             SoundUtils.ErrorCheck(this.result);
 
             ByteBuffer byteBuffer = BufferUtils.newByteBuffer(256);
             FMOD_PLUGINTYPE[] plugin_types = new FMOD_PLUGINTYPE[1];
-            this.result = this.system.getPluginInfo(buffer.getInt(0), plugin_types, byteBuffer, byteBuffer.capacity(), buffer2.asIntBuffer());
+            int pluginHandle = buffer.getInt(0);
+            this.pluginHandles[i] = pluginHandle;
+            this.result = this.getSystem().getPluginInfo(pluginHandle, plugin_types, byteBuffer, byteBuffer.capacity(), buffer2.asIntBuffer());
             SoundUtils.ErrorCheck(this.result);
 
             String pluginName = BufferUtils.toString(byteBuffer);
             this.javaDAWView.getOutputTextArea().append(i + ": " + pluginName + "\r\n");
             this.drivers.put(i, pluginName);
         }
+    }
+
+    /**
+     * @return the system
+     */
+    public System getSystem() {
+        return system;
     }
 
 }
