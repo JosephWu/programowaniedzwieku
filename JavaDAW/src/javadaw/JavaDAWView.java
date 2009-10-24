@@ -117,6 +117,7 @@ public class JavaDAWView extends FrameView {
         jMenuItem1 = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -190,6 +191,15 @@ public class JavaDAWView extends FrameView {
         });
         fileMenu.add(jMenuItem2);
 
+        jMenuItem3.setText(resourceMap.getString("jMenuItem3.text")); // NOI18N
+        jMenuItem3.setName("jMenuItem3"); // NOI18N
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem3);
+
         menuBar.add(fileMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
@@ -247,11 +257,11 @@ public class JavaDAWView extends FrameView {
         this.jDAWEngine.deviceInfo.createSystem();
         this.jDAWEngine.deviceInfo.getDrivers();
         this.jDAWEngine.deviceInfo.getDevices();
-        this.jDAWEngine.deviceInfo.init();
+        //this.jDAWEngine.deviceInfo.init();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        DeviceConfigurationGUI deviceConfigurationGUI = new DeviceConfigurationGUI();
+        DeviceConfigurationGUI deviceConfigurationGUI = new DeviceConfigurationGUI(jDAWEngine);
         for (int i = 0; i < this.jDAWEngine.deviceInfo.devices.size(); i++) {
             deviceConfigurationGUI.getDevicesComboBox()
                     .addItem(this.jDAWEngine.deviceInfo.devices.get(i));
@@ -264,9 +274,17 @@ public class JavaDAWView extends FrameView {
 
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        this.jDAWEngine.deviceInfo.init();
+        OneSound oneSound = new OneSound(jDAWEngine, "test.mp3");
+        oneSound.play();
+        //this.jDAWEngine.deviceInfo.getSystem().close();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainPanel;

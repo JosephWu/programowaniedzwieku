@@ -17,8 +17,11 @@ package javadaw;
  */
 public class DeviceConfigurationGUI extends javax.swing.JFrame {
 
+    private JDAWEngine jDAWEngine;
+
     /** Creates new form DeviceConfigurationGUI */
-    public DeviceConfigurationGUI() {
+    public DeviceConfigurationGUI(JDAWEngine jDAWEngine) {
+        this.jDAWEngine = jDAWEngine;
         initComponents();
     }
 
@@ -35,6 +38,7 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         driversComboBox = new javax.swing.JComboBox();
+        jButton1 = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(javadaw.JavaDAWApp.class).getContext().getResourceMap(DeviceConfigurationGUI.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
@@ -50,17 +54,27 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
 
         driversComboBox.setName("driversComboBox"); // NOI18N
 
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(devicesComboBox, 0, 248, Short.MAX_VALUE)
-                    .addComponent(driversComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel2)
+                        .addComponent(devicesComboBox, 0, 248, Short.MAX_VALUE)
+                        .addComponent(driversComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton1))
                 .addContainerGap(142, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -74,15 +88,23 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(driversComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(150, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.jDAWEngine.deviceInfo.setDevice(this.getDevicesComboBox().getSelectedIndex());
+        this.jDAWEngine.deviceInfo.setDriver(this.getDriversComboBox().getSelectedIndex());
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox devicesComboBox;
     private javax.swing.JComboBox driversComboBox;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
