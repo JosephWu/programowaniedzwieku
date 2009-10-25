@@ -97,8 +97,11 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.jDAWEngine.deviceInfo.getSystem().release();
+        this.jDAWEngine.deviceInfo.createSystem();
         this.jDAWEngine.deviceInfo.setDevice(this.getDevicesComboBox().getSelectedIndex());
         this.jDAWEngine.deviceInfo.setDriver(this.getDriversComboBox().getSelectedIndex());
+        this.jDAWEngine.deviceInfo.init();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
