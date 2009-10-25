@@ -279,7 +279,8 @@ public class JavaDAWView extends FrameView {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         this.jDAWEngine.deviceInfo.init();
-        OneSound oneSound = new OneSound(jDAWEngine, "test.mp3");
+        SoundFileChooserGUI soundFileChooserGUI = new SoundFileChooserGUI();
+        OneSound oneSound = new OneSound(jDAWEngine, soundFileChooserGUI.getPath());
         oneSound.play();
         //this.jDAWEngine.deviceInfo.getSystem().close();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
