@@ -23,6 +23,7 @@ public class JavaDAWView extends FrameView {
 
     private JDAWEngine jDAWEngine;
     private DeviceConfigurationGUI deviceConfigurationGUI;
+    private OneSound oneSound;
 
     public JavaDAWView(SingleFrameApplication app) {
         super(app);
@@ -116,9 +117,13 @@ public class JavaDAWView extends FrameView {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -178,11 +183,6 @@ public class JavaDAWView extends FrameView {
         });
         fileMenu.add(jMenuItem1);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(javadaw.JavaDAWApp.class).getContext().getActionMap(JavaDAWView.class, this);
-        exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
-        exitMenuItem.setName("exitMenuItem"); // NOI18N
-        fileMenu.add(exitMenuItem);
-
         jMenuItem2.setText(resourceMap.getString("jMenuItem2.text")); // NOI18N
         jMenuItem2.setName("jMenuItem2"); // NOI18N
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -192,6 +192,17 @@ public class JavaDAWView extends FrameView {
         });
         fileMenu.add(jMenuItem2);
 
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(javadaw.JavaDAWApp.class).getContext().getActionMap(JavaDAWView.class, this);
+        exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
+        exitMenuItem.setText(resourceMap.getString("exitMenuItem.text")); // NOI18N
+        exitMenuItem.setName("exitMenuItem"); // NOI18N
+        fileMenu.add(exitMenuItem);
+
+        menuBar.add(fileMenu);
+
+        jMenu1.setText(resourceMap.getString("jMenu1.text")); // NOI18N
+        jMenu1.setName("jMenu1"); // NOI18N
+
         jMenuItem3.setText(resourceMap.getString("jMenuItem3.text")); // NOI18N
         jMenuItem3.setName("jMenuItem3"); // NOI18N
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -199,9 +210,36 @@ public class JavaDAWView extends FrameView {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem3);
+        jMenu1.add(jMenuItem3);
 
-        menuBar.add(fileMenu);
+        jMenuItem4.setText(resourceMap.getString("jMenuItem4.text")); // NOI18N
+        jMenuItem4.setName("jMenuItem4"); // NOI18N
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
+        jMenuItem5.setText(resourceMap.getString("jMenuItem5.text")); // NOI18N
+        jMenuItem5.setName("jMenuItem5"); // NOI18N
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem5);
+
+        jMenuItem6.setText(resourceMap.getString("jMenuItem6.text")); // NOI18N
+        jMenuItem6.setName("jMenuItem6"); // NOI18N
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem6);
+
+        menuBar.add(jMenu1);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
@@ -258,6 +296,7 @@ public class JavaDAWView extends FrameView {
         this.jDAWEngine.deviceInfo.createSystem();
         this.jDAWEngine.deviceInfo.getDrivers();
         this.jDAWEngine.deviceInfo.getDevices();
+        this.jDAWEngine.deviceInfo.init();
         //this.jDAWEngine.deviceInfo.init();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -278,17 +317,31 @@ public class JavaDAWView extends FrameView {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        this.jDAWEngine.deviceInfo.init();
         SoundFileChooserGUI soundFileChooserGUI = new SoundFileChooserGUI();
-        OneSound oneSound = new OneSound(jDAWEngine, soundFileChooserGUI.getPath());
-        oneSound.play();
-        //this.jDAWEngine.deviceInfo.getSystem().close();
+        this.oneSound = new OneSound(jDAWEngine, soundFileChooserGUI.getPath());
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        this.oneSound.play();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        this.oneSound.pause();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        this.oneSound.stop();
+        //this.jDAWEngine.deviceInfo.getSystem().release();
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainPanel;

@@ -34,12 +34,15 @@ public class OneSound {
     private Sound sound;
     private FMOD_RESULT result;
     private Channel channel;
+    private String path;
+
+    private boolean paused;
 
     public OneSound(JDAWEngine jDAWEngine, String path) {
         this.jDAWEngine = jDAWEngine;
-        this.channel = new Channel();
         this.sound = new Sound();
         this.result = this.jDAWEngine.getSystem().createStream(path, FMOD_DEFAULT, null, this.sound);
+        this.path = path;
         /**if (result == FMOD_RESULT.FMOD_ERR_FILE_NOTFOUND) {
             File file = new File(path);
             if (file.exists()) {
@@ -85,7 +88,13 @@ public class OneSound {
     }
 
     public void play() {
-        this.result = this.jDAWEngine.getSystem().playSound(FMOD_CHANNEL_FREE, this.sound, false, this.channel);
+        if (this.channel == null) {
+            this.channel = new Channel();
+            this.result = this.jDAWEngine.getSystem().playSound(FMOD_CHANNELINDEX.FMOD_CHANNEL_FREE, this.sound, false, this.channel);
+        } else {
+            this.result = this.jDAWEngine.getSystem().playSound(FMOD_CHANNELINDEX.FMOD_CHANNEL_REUSE, this.sound, false, this.channel);
+        }
+        this.paused = false;
         SoundUtils.ErrorCheck(result);
     }
 
@@ -95,14 +104,19 @@ public class OneSound {
     }
 
     public void pause() {
-        ByteBuffer buffer = BufferUtils.newByteBuffer(256);
-        this.result = this.channel.isPlaying(buffer);
-        SoundUtils.ErrorCheck(result);
-        int isPlaying = buffer.getInt(0);
-        if (isPlaying == 0)
-            this.result = this.channel.setPaused(true);
-        else
+        //ByteBuffer buffer = BufferUtils.newByteBuffer(256);
+        //this.result = this.channel.isPlaying(buffer);
+        //SoundUtils.ErrorCheck(result);
+        //int isPlaying = buffer.getInt(0);
+        //System.out.println(isPlaying);
+        if (paused) {
             this.result = this.channel.setPaused(false);
+            paused = !paused;
+        }
+        else {
+            this.result = this.channel.setPaused(true);
+            paused = !paused;
+        }
         SoundUtils.ErrorCheck(result);
     }
 
