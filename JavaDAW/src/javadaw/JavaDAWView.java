@@ -119,12 +119,14 @@ public class JavaDAWView extends FrameView {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
+        jCheckBoxMenuItemStreamed = new javax.swing.JCheckBoxMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -199,6 +201,11 @@ public class JavaDAWView extends FrameView {
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
 
+        jCheckBoxMenuItemStreamed.setSelected(true);
+        jCheckBoxMenuItemStreamed.setText(resourceMap.getString("jCheckBoxMenuItemStreamed.text")); // NOI18N
+        jCheckBoxMenuItemStreamed.setName("jCheckBoxMenuItemStreamed"); // NOI18N
+        fileMenu.add(jCheckBoxMenuItemStreamed);
+
         menuBar.add(fileMenu);
 
         jMenu1.setText(resourceMap.getString("jMenu1.text")); // NOI18N
@@ -248,6 +255,15 @@ public class JavaDAWView extends FrameView {
             }
         });
         jMenu1.add(jMenuItem7);
+
+        jMenuItem8.setText(resourceMap.getString("jMenuItem8.text")); // NOI18N
+        jMenuItem8.setName("jMenuItem8"); // NOI18N
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem8);
 
         menuBar.add(jMenu1);
 
@@ -328,7 +344,8 @@ public class JavaDAWView extends FrameView {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         SoundFileChooserGUI soundFileChooserGUI = new SoundFileChooserGUI();
-        this.oneSound = new OneSound(jDAWEngine, soundFileChooserGUI.getPath());
+        this.oneSound = new OneSound(jDAWEngine, soundFileChooserGUI.getPath(),
+                this.jCheckBoxMenuItemStreamed.getState());
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -348,7 +365,12 @@ public class JavaDAWView extends FrameView {
         this.outputTextArea.append("Częstotliwość dźwięku: " + this.oneSound.getFrequency() + "\r\n");
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        this.oneSound.getCroseings(0, 256);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemStreamed;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -357,6 +379,7 @@ public class JavaDAWView extends FrameView {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainPanel;
