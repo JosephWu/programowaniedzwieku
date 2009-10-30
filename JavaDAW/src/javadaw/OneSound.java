@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,6 +90,14 @@ public class OneSound {
             paused = !paused;
         }
         SoundUtils.ErrorCheck(result);
+    }
+
+    public double getFrequency() {
+        FloatBuffer buffer = BufferUtils.newFloatBuffer(256);
+        this.result = this.channel.getFrequency(buffer);
+        SoundUtils.ErrorCheck(result);
+        double toRet = buffer.get(0);
+        return toRet;
     }
 
 }
