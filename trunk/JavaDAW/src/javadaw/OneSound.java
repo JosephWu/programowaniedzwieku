@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,8 +41,11 @@ public class OneSound {
 
     private boolean paused;
 
-    public OneSound(JDAWEngine jDAWEngine, String path) {
+    private boolean streamed;
+
+    public OneSound(JDAWEngine jDAWEngine, String path, boolean streamed) {
             this.jDAWEngine = jDAWEngine;
+            this.streamed = streamed;
             this.sound = new Sound();
             //System.out.println(java.nio.charset.Charset.defaultCharset().name());
             //System.out.println(path.getBytes().length);
@@ -54,7 +58,12 @@ public class OneSound {
             BufferUtils.putNullTerminal(buffer);
             buffer.rewind();
 
-            this.result = this.jDAWEngine.getSystem().createStream(buffer, FMOD_MODE.FMOD_UNICODE, null, this.sound);
+            if (streamed)
+                this.result = this.jDAWEngine.getSystem()
+                        .createStream(buffer, FMOD_MODE.FMOD_UNICODE, null, this.sound);
+            else
+                this.result = this.jDAWEngine.getSystem()
+                        .createSound(buffer, FMOD_MODE.FMOD_UNICODE, null, this.sound);
             SoundUtils.ErrorCheck(result);
         
     }
@@ -97,6 +106,25 @@ public class OneSound {
         this.result = this.channel.getFrequency(buffer);
         SoundUtils.ErrorCheck(result);
         double toRet = buffer.get(0);
+        return toRet;
+    }
+
+    public int getCroseings(int offset, int length) {
+        int toRet = 0;
+        ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
+        ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
+        IntBuffer bufferLen1 = BufferUtils.newIntBuffer(256);
+        IntBuffer bufferLen2 = BufferUtils.newIntBuffer(256);
+        this.result = this.sound.lock(offset, length, bufferPtr1, bufferPtr2,
+                bufferLen1, bufferLen2);
+
+        System.out.println(bufferLen1.get(0));
+        System.out.println(bufferLen2.get(0));
+        byte[] dst = new byte[32];
+        
+        bufferPtr1[0].get(dst);
+        System.out.println(dst[0]);
+
         return toRet;
     }
 
