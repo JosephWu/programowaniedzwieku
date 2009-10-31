@@ -26,6 +26,7 @@ import org.jouvieje.FmodEx.Sound;
 
 import static org.jouvieje.FmodEx.Defines.FMOD_MODE.FMOD_DEFAULT;
 import static org.jouvieje.FmodEx.Enumerations.FMOD_CHANNELINDEX.FMOD_CHANNEL_FREE;
+import static org.jouvieje.FmodEx.Defines.FMOD_TIMEUNIT.*;
 
 
 /**
@@ -115,17 +116,38 @@ public class OneSound {
         ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
         IntBuffer bufferLen1 = BufferUtils.newIntBuffer(256);
         IntBuffer bufferLen2 = BufferUtils.newIntBuffer(256);
-        this.result = this.sound.lock(offset, length, bufferPtr1, bufferPtr2,
+
+        IntBuffer intBuffer = BufferUtils.newIntBuffer(256);
+        this.result = this.sound.getLength(intBuffer, FMOD_TIMEUNIT_PCMBYTES);
+        SoundUtils.ErrorCheck(result);
+
+        int size = intBuffer.get(0);
+        this.result = this.sound.lock(offset, size, bufferPtr1, bufferPtr2,
                 bufferLen1, bufferLen2);
+        SoundUtils.ErrorCheck(result);
 
         System.out.println(bufferLen1.get(0));
         System.out.println(bufferLen2.get(0));
-        byte[] dst = new byte[32];
-        
-        bufferPtr1[0].get(dst);
-        System.out.println(dst[0]);
+        byte[] dst = new byte[2];
 
+        int j = 0;
+        while (true) {
+            if (j == size/2)
+                break;
+            bufferPtr1[0].get(dst);
+            System.out.println(unsignedByteToInt(dst));
+            j++;
+        }
         return toRet;
     }
+
+    public static int unsignedByteToInt(byte[] b) {
+        int toRet = 0;
+        for (int i = 0; i < b.length; i++) {
+            toRet += ((int) (b[i] & 0xFF)) << (i*8);
+        }
+        return toRet;
+    }
+
 
 }
