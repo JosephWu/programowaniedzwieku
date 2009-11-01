@@ -28,6 +28,11 @@ import static org.jouvieje.FmodEx.Defines.FMOD_MODE.FMOD_DEFAULT;
 import static org.jouvieje.FmodEx.Enumerations.FMOD_CHANNELINDEX.FMOD_CHANNEL_FREE;
 import static org.jouvieje.FmodEx.Defines.FMOD_TIMEUNIT.*;
 
+import flanagan.io.*;
+import flanagan.math.*;
+import flanagan.plot.*;
+import java.util.ArrayList;
+
 
 /**
  *
@@ -126,19 +131,69 @@ public class OneSound {
                 bufferLen1, bufferLen2);
         SoundUtils.ErrorCheck(result);
 
-        System.out.println(bufferLen1.get(0));
-        System.out.println(bufferLen2.get(0));
         byte[] dst = new byte[2];
-
         int j = 0;
         while (true) {
             if (j == size/2)
                 break;
             bufferPtr1[0].get(dst);
-            System.out.println(unsignedByteToInt(dst));
+            //System.out.println(unsignedByteToInt(dst));
             j++;
         }
         return toRet;
+    }
+
+
+    public void plotSpectogram() {
+        ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
+        ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
+        IntBuffer bufferLen1 = BufferUtils.newIntBuffer(256);
+        IntBuffer bufferLen2 = BufferUtils.newIntBuffer(256);
+
+        IntBuffer intBuffer = BufferUtils.newIntBuffer(256);
+        this.result = this.sound.getLength(intBuffer, FMOD_TIMEUNIT_PCMBYTES);
+        SoundUtils.ErrorCheck(result);
+
+        int size = intBuffer.get(0);
+        this.result = this.sound.lock(0, size, bufferPtr1, bufferPtr2,
+                bufferLen1, bufferLen2);
+        SoundUtils.ErrorCheck(result);
+
+        double[] fourierValues = new double[size/2];
+        byte[] dst = new byte[2];
+        int j = 0;
+        while (true) {
+            if (j == size/2)
+                break;
+            bufferPtr1[0].get(dst);
+            fourierValues[j] = (unsignedByteToInt(dst)) / 65535.0;
+            j++;
+        }
+
+        int blockSize = 512;
+        int m = 256;
+
+        ArrayList<double []> spectrogram = new ArrayList<double []>();
+        for (int i = m; i < size/2-256; i+= 256) {
+            if (i + blockSize > size/2)
+                break;
+            Complex[] input = new Complex[512];
+
+            for (int k = 0; k < blockSize; k++)
+                input[k] = new Complex(fourierValues[i+k]
+                        *(0.53836 - 0.46164*Math.cos((2.0*Math.PI*(k-m))/(blockSize-1))),
+                        0.0);
+            DFT dft = new DFT();
+            Complex[] calculatedDft = dft.fft(input);
+            double[] spectogramVertLine = dft.getSpectrum(calculatedDft);
+            spectrogram.add(spectogramVertLine);
+        }
+        SpectrogramPanel spectrogramPanel = new SpectrogramPanel(spectrogram);
+        SpectrogramFrame spectrogramFrame = new SpectrogramFrame(spectrogramPanel);
+        spectrogramFrame.setVisible(true);
+        spectrogramFrame.validate();
+
+
     }
 
     public static int unsignedByteToInt(byte[] b) {
