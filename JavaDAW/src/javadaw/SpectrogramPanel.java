@@ -26,10 +26,11 @@ public class SpectrogramPanel extends JPanel {
         this.values = values;
         this.maxValue = 0.0;
         this.minValue = 0.0;
+        
         for (int i = 0; i < this.values.size(); i++) {
             for (int j = 0; j < this.values.get(i).length; j++) {
                 double val = this.values.get(i)[j];
-                val = 20*Math.log10(val);
+                val = Math.log10(val);
                 this.values.get(i)[j] = val;
                 if (this.maxValue < val) {
                     this.maxValue = val;
@@ -37,16 +38,17 @@ public class SpectrogramPanel extends JPanel {
                     this.minValue = val;
             }
         }
+
     }
 
     @Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         for (int i = 0; i < this.values.size(); i++) {
-            for (int j = 0; j < this.values.get(i).length; j++) {
-                int color = (int) (((this.values.get(i)[j]-this.minValue) / (this.maxValue-this.minValue)) * 255);
-                g2.setColor(new Color(color, color, color));
-                g2.draw(new Line2D.Double(i, j, i, j));
+            for (int j = this.values.get(i).length/2; j < this.values.get(i).length; j++) {
+                double color = (((this.values.get(i)[j]-this.minValue) / (this.maxValue-this.minValue))) * 255.0;
+                g2.setColor(new Color((int)color, (int)color, (int)color));
+                g2.draw(new Line2D.Double(i, j-this.values.get(i).length/2, i, j-this.values.get(i).length/2));
             }
         }
         //g2.drawString("Maksymalna wartość: " + this.maxValue,
