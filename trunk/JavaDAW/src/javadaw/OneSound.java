@@ -171,7 +171,7 @@ public class OneSound {
         }
 
         int blockSize = 512;
-        int m = 256;
+        int m = 512;
 
         ArrayList<double []> spectrogram = new ArrayList<double []>();
         for (int i = m; i < size/2-256; i+= 256) {
