@@ -36,7 +36,6 @@ public class SpectrogramFrame extends javax.swing.JFrame {
 
         jPanel1 = this.sp;
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("Form"); // NOI18N
 
         jPanel1.setName("jPanel1"); // NOI18N

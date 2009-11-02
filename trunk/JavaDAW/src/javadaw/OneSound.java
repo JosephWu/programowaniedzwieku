@@ -171,7 +171,7 @@ public class OneSound {
         }
 
         int blockSize = 512;
-        int m = 512;
+        int m = 256;
 
         ArrayList<double []> spectrogram = new ArrayList<double []>();
         for (int i = m; i < size/2-256; i+= 256) {
@@ -181,7 +181,7 @@ public class OneSound {
 
             for (int k = 0; k < blockSize; k++)
                 input[k] = new Complex(fourierValues[i+k]
-                        *(0.53836 - 0.46164*Math.cos((2.0*Math.PI*(k-m))/(blockSize-1))),
+                        *(0.5 * (1 - Math.cos((2.0*Math.PI*(k-m))/(blockSize-1)))),
                         0.0);
             DFT dft = new DFT();
             Complex[] calculatedDft = dft.fft(input);
