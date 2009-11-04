@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 /**
@@ -360,6 +361,9 @@ public class JavaDAWView extends FrameView {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         SoundFileChooserGUI soundFileChooserGUI = new SoundFileChooserGUI();
+        int tmp = soundFileChooserGUI.loadOpenDialog();
+        if (tmp == JFileChooser.CANCEL_OPTION || tmp == JFileChooser.ERROR_OPTION)
+            return;
         this.oneSound = new OneSound(jDAWEngine, soundFileChooserGUI.getPath(),
                 this.jCheckBoxMenuItemStreamed.getState());
     }//GEN-LAST:event_jMenuItem3ActionPerformed
