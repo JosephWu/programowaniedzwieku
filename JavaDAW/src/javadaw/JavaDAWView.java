@@ -405,6 +405,7 @@ public class JavaDAWView extends FrameView {
             int tmp = this.oneSound.getCroseings(0, 256, Integer.parseInt(s));
             this.outputTextArea.append("Częstotliwość podstawowa dźwięku: " +
                     tmp / 2 + " Hz.\n");
+            this.oneSound.generateSound(tmp/2);
         }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
