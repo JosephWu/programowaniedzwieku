@@ -49,29 +49,35 @@ public class OneSound {
 
     private boolean streamed;
 
+    private double bytesLength;
+
     public OneSound(JDAWEngine jDAWEngine, String path, boolean streamed) {
-            this.jDAWEngine = jDAWEngine;
-            this.streamed = streamed;
-            this.sound = new Sound();
-            //System.out.println(java.nio.charset.Charset.defaultCharset().name());
-            //System.out.println(path.getBytes().length);
-            //System.out.println(path.length());
+        this.jDAWEngine = jDAWEngine;
+        this.streamed = streamed;
+        this.sound = new Sound();
+        //System.out.println(java.nio.charset.Charset.defaultCharset().name());
+        //System.out.println(path.getBytes().length);
+        //System.out.println(path.length());
 
-            byte[] bytes = path.getBytes(Charset.forName("UTF-16LE"));
-            ByteBuffer buffer = BufferUtils.newByteBuffer(bytes.length + 2);
-            buffer.put(bytes);
-            BufferUtils.putNullTerminal(buffer);
-            BufferUtils.putNullTerminal(buffer);
-            buffer.rewind();
+        byte[] bytes = path.getBytes(Charset.forName("UTF-16LE"));
+        ByteBuffer buffer = BufferUtils.newByteBuffer(bytes.length + 2);
+        buffer.put(bytes);
+        BufferUtils.putNullTerminal(buffer);
+        BufferUtils.putNullTerminal(buffer);
+        buffer.rewind();
 
-            if (streamed)
-                this.result = this.jDAWEngine.getSystem()
-                        .createStream(buffer, FMOD_MODE.FMOD_UNICODE, null, this.sound);
-            else
-                this.result = this.jDAWEngine.getSystem()
-                        .createSound(buffer, FMOD_MODE.FMOD_UNICODE, null, this.sound);
-            SoundUtils.ErrorCheck(result);
-        
+        if (streamed) {
+            this.result = this.jDAWEngine.getSystem().createStream(buffer, FMOD_MODE.FMOD_UNICODE, null, this.sound);
+        } else {
+            this.result = this.jDAWEngine.getSystem().createSound(buffer, FMOD_MODE.FMOD_UNICODE, null, this.sound);
+        }
+        SoundUtils.ErrorCheck(result);
+
+        IntBuffer buffer2 = BufferUtils.newIntBuffer(256);
+        this.result = this.sound.getLength(buffer2, FMOD_TIMEUNIT_PCMBYTES);
+        SoundUtils.ErrorCheck(result);
+        this.bytesLength = buffer.get(0);
+
     }
 
     public void play() {
@@ -189,7 +195,7 @@ public class OneSound {
             double[] spectogramVertLine = dft.getSpectrum(calculatedDft);
             spectrogram.add(spectogramVertLine);
         }
-        SpectrogramPanel spectrogramPanel = new SpectrogramPanel(spectrogram);
+        SpectrogramPanel spectrogramPanel = new SpectrogramPanel(spectrogram, this);
         SpectrogramFrame spectrogramFrame = new SpectrogramFrame(spectrogramPanel);
         spectrogramFrame.setVisible(true);
         spectrogramFrame.validate();
@@ -203,6 +209,13 @@ public class OneSound {
             toRet += ((int) (b[i] & 0xFF)) << (i*8);
         }
         return toRet;
+    }
+
+    /**
+     * @return the bytesLength
+     */
+    public double getBytesLength() {
+        return bytesLength;
     }
 
 
