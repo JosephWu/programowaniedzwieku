@@ -402,7 +402,8 @@ public class JavaDAWView extends FrameView {
             String s = (String)JOptionPane.showInputDialog(null,
                     "Wpisz wartość progową:\n",
                     "Próg", JOptionPane.INFORMATION_MESSAGE);
-            this.oneSound.getCroseings(0, 256);
+            int tmp = this.oneSound.getCroseings(0, 256, Integer.parseInt(s));
+            System.out.println(tmp);
         }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
