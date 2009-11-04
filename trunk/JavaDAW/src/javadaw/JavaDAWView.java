@@ -403,7 +403,8 @@ public class JavaDAWView extends FrameView {
                     "Wpisz wartość progową:\n",
                     "Próg", JOptionPane.INFORMATION_MESSAGE);
             int tmp = this.oneSound.getCroseings(0, 256, Integer.parseInt(s));
-            System.out.println(tmp);
+            this.outputTextArea.append("Częstotliwość podstawowa dźwięku: " +
+                    tmp / 2 + " Hz.\n");
         }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
