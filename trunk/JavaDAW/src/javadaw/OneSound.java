@@ -117,7 +117,7 @@ public class OneSound {
         SoundUtils.ErrorCheck(result);
     }
 
-    public int getCroseings(int offset, int length) {
+    public int getCroseings(int offset, int length, int block) {
         int toRet = 0;
         ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
         ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
@@ -135,10 +135,21 @@ public class OneSound {
 
         byte[] dst = new byte[2];
         int j = 0;
+        bufferPtr1[0].get(dst);
+        boolean below = false;
+        if (unsignedByteToInt(dst) < block)
+            below = true;
         while (true) {
-            if (j == size/2)
+            if (j == size/2-1)
                 break;
             bufferPtr1[0].get(dst);
+            if (unsignedByteToInt(dst) > block && below == true) {
+                below = false;
+                toRet++;
+            } else if (unsignedByteToInt(dst) < block && below == false) {
+                below = true;
+                toRet++;
+            }
             //System.out.println(unsignedByteToInt(dst));
             j++;
         }
