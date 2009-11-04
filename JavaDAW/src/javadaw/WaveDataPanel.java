@@ -21,14 +21,17 @@ public class WaveDataPanel extends JPanel {
     BufferedImage scaledImage;
     BufferedImage image;
 
+    int width;
+    int height;
+
     public WaveDataPanel(int[] values, OneSound oneSound) {
         this.oneSound = oneSound;
         this.values = values;
         this.maxValue = 0;
 
-        int width = 658;
-        int height = 300;
-
+        width = 658;
+        height = 300;
+/**
         scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
 
         int maxNumber = (int) Math.pow(2.0, 8.0*oneSound.getBytesLength()/oneSound.getSamplesLength());
@@ -44,13 +47,32 @@ public class WaveDataPanel extends JPanel {
 
         graphics2Dimage.dispose();
         graphics2D.dispose();
-        
+   **/
     }
 
     @Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(scaledImage, 0, 0, this);
+      //  g2.drawImage(scaledImage, 0, 0, this);
+            // Draw left channel
+            double scale = 0.5 * height / 32768;
+            int xPrev = 0, yPrev = 0;
+            double center = height / 2;
+            for (int x = 0; x < width; x++)
+            {
+                int y = (int)(center + (values[values.length / width * x] * scale));
+                if (x == 0)
+                {
+                    xPrev = 0;
+                    yPrev = y;
+                }
+                else
+                {
+                    g2.drawLine(xPrev, yPrev, x, y);
+                    xPrev = x;
+                    yPrev = y;
+                }
+            }
     }
 
 }
