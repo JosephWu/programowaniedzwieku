@@ -171,13 +171,14 @@ public class OneSound {
         }
 
         int blockSize = 512;
+        int overlap = 2;
         int m = 256;
 
         ArrayList<double []> spectrogram = new ArrayList<double []>();
-        for (int i = m; i < size/2-256; i+= 256) {
+        for (int i = 0; i < size/2; i+= blockSize/overlap) {
             if (i + blockSize > size/2)
                 break;
-            Complex[] input = new Complex[512];
+            Complex[] input = new Complex[blockSize];
 
             for (int k = 0; k < blockSize; k++)
                 input[k] = new Complex(fourierValues[i+k]
