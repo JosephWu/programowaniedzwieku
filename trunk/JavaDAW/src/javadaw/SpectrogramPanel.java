@@ -22,7 +22,10 @@ public class SpectrogramPanel extends JPanel {
     private double maxValue;
     private double minValue;
 
-    public SpectrogramPanel(ArrayList<double[]> values) {
+    private OneSound oneSound;
+
+    public SpectrogramPanel(ArrayList<double[]> values, OneSound oneSound) {
+        this.oneSound = oneSound;
         this.values = values;
         this.maxValue = 0.0;
         this.minValue = 0.0;
