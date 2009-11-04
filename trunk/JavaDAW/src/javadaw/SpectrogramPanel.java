@@ -43,16 +43,21 @@ public class SpectrogramPanel extends JPanel {
 
     @Override
     public void paint(Graphics g) {
+        int offset = 30;
         Graphics2D g2 = (Graphics2D) g;
         for (int i = 0; i < this.values.size(); i++) {
             for (int j = this.values.get(i).length/2; j < this.values.get(i).length; j++) {
                 double color = (((this.values.get(i)[j]-this.minValue) / (this.maxValue-this.minValue))) * 255.0;
                 g2.setColor(new Color((int)color, (int)color, (int)color));
-                g2.draw(new Line2D.Double(i, j-this.values.get(i).length/2, i, j-this.values.get(i).length/2));
+                g2.draw(new Line2D.Double(i+offset, j-this.values.get(i).length/2, i+offset, j-this.values.get(i).length/2));
             }
         }
-        //g2.drawString("Maksymalna wartość: " + this.maxValue,
-          //      20f, (float) ((this.maxValue + 10.0) / diver + 30.0));
+        g2.setColor(new Color(0));
+        g2.drawString("czas (próbki)", this.getWidth()-100, this.getHeight()-offset);
+        g2.rotate(Math.PI/2.0);
+        g2.drawString("częstotliwość", 0+10, 0-5);
+        g2.rotate(-Math.PI/2.0);
+        
 
     }
 
