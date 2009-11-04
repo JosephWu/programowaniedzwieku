@@ -42,9 +42,12 @@ public class OneSound {
 
     private double frequency;
 
+    private String path;
+
     public OneSound(JDAWEngine jDAWEngine, String path, boolean streamed) {
         this.jDAWEngine = jDAWEngine;
         this.streamed = streamed;
+        this.path = path;
         this.sound = new Sound();
         //System.out.println(java.nio.charset.Charset.defaultCharset().name());
         //System.out.println(path.getBytes().length);
@@ -230,6 +233,13 @@ public class OneSound {
      */
     public double getFrequency() {
         return frequency;
+    }
+
+    /**
+     * @return the path
+     */
+    public String getPath() {
+        return path;
     }
 
 
