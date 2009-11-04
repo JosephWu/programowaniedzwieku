@@ -61,7 +61,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="fmodex_vc.lib $(NOINHERIT)"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\Users\pioras\Documents\Visual Studio 2008\Projects\CVDAW\CVDAW\lib&quot;"
+				AdditionalLibraryDirectories="&quot;F:\Dokumenty\STUDIA - Sem IX\repozytoria\pd\trunk\CVDAW\CVDAW\lib&quot;"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				SubSystem="2"
