@@ -5,18 +5,10 @@
 
 package javadaw;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.Charset;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jouvieje.FmodEx.Channel;
 import org.jouvieje.FmodEx.Defines.FMOD_MODE;
 import org.jouvieje.FmodEx.Enumerations.FMOD_CHANNELINDEX;
@@ -24,13 +16,8 @@ import org.jouvieje.FmodEx.Enumerations.FMOD_RESULT;
 import org.jouvieje.FmodEx.Misc.BufferUtils;
 import org.jouvieje.FmodEx.Sound;
 
-import static org.jouvieje.FmodEx.Defines.FMOD_MODE.FMOD_DEFAULT;
-import static org.jouvieje.FmodEx.Enumerations.FMOD_CHANNELINDEX.FMOD_CHANNEL_FREE;
 import static org.jouvieje.FmodEx.Defines.FMOD_TIMEUNIT.*;
 
-import flanagan.io.*;
-import flanagan.math.*;
-import flanagan.plot.*;
 import java.util.ArrayList;
 
 
@@ -49,7 +36,11 @@ public class OneSound {
 
     private boolean streamed;
 
-    private double bytesLength;
+    private int bytesLength;
+    private int samplesLength;
+    private int miliSecondsLength;
+
+    private double frequency;
 
     public OneSound(JDAWEngine jDAWEngine, String path, boolean streamed) {
         this.jDAWEngine = jDAWEngine;
@@ -76,7 +67,17 @@ public class OneSound {
         IntBuffer buffer2 = BufferUtils.newIntBuffer(256);
         this.result = this.sound.getLength(buffer2, FMOD_TIMEUNIT_PCMBYTES);
         SoundUtils.ErrorCheck(result);
-        this.bytesLength = buffer.get(0);
+        this.bytesLength = buffer2.get(0);
+
+        this.result = this.sound.getLength(buffer2, FMOD_TIMEUNIT_PCM);
+        SoundUtils.ErrorCheck(result);
+        this.samplesLength = buffer2.get(0);
+
+        this.result = this.sound.getLength(buffer2, FMOD_TIMEUNIT_MS);
+        SoundUtils.ErrorCheck(result);
+        this.miliSecondsLength = buffer2.get(0);
+
+        this.frequency = this.samplesLength * 1000.0 / this.miliSecondsLength;
 
     }
 
@@ -216,6 +217,20 @@ public class OneSound {
      */
     public double getBytesLength() {
         return bytesLength;
+    }
+
+    /**
+     * @return the samplesLength
+     */
+    public int getSamplesLength() {
+        return samplesLength;
+    }
+
+    /**
+     * @return the miliSecondsLength
+     */
+    public int getMiliSecondsLength() {
+        return miliSecondsLength;
     }
 
 
