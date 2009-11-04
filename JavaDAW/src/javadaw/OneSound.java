@@ -179,7 +179,7 @@ public class OneSound {
             if (j == size/2)
                 break;
             bufferPtr1[0].get(dst);
-            fourierValues[j] = (unsignedByteToInt(dst)) / 65535.0;
+            fourierValues[j] = ((unsignedByteToInt(dst)) + 32767.0) / 65535.0;
             j++;
         }
 
@@ -244,7 +244,7 @@ public class OneSound {
     public static int unsignedByteToInt(byte[] b) {
         int toRet = 0;
         for (int i = 0; i < b.length; i++) {
-            toRet += ((int) (b[i] & 0xFF)) << (i*8);
+            toRet += ((int) (b[i])) << (i*8);
         }
         return toRet;
     }
