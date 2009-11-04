@@ -114,14 +114,6 @@ public class OneSound {
         SoundUtils.ErrorCheck(result);
     }
 
-    public double getFrequency() {
-        FloatBuffer buffer = BufferUtils.newFloatBuffer(256);
-        this.result = this.channel.getFrequency(buffer);
-        SoundUtils.ErrorCheck(result);
-        double toRet = buffer.get(0);
-        return toRet;
-    }
-
     public int getCroseings(int offset, int length) {
         int toRet = 0;
         ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
@@ -231,6 +223,13 @@ public class OneSound {
      */
     public int getMiliSecondsLength() {
         return miliSecondsLength;
+    }
+
+    /**
+     * @return the frequency
+     */
+    public double getFrequency() {
+        return frequency;
     }
 
 
