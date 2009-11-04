@@ -16,6 +16,7 @@ import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * The application's main frame.
@@ -387,8 +388,12 @@ public class JavaDAWView extends FrameView {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        if (this.oneSound != null)
+        if (this.oneSound != null) {
+            String s = (String)JOptionPane.showInputDialog(null,
+                    "Wpisz wartość progową:\n",
+                    "Próg", JOptionPane.INFORMATION_MESSAGE);
             this.oneSound.getCroseings(0, 256);
+        }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
