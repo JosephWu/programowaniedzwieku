@@ -22,6 +22,8 @@ public class SpectrogramPanel extends JPanel {
     private double maxValue;
     private double minValue;
 
+    private double frequency;
+
     private OneSound oneSound;
 
     public SpectrogramPanel(ArrayList<double[]> values, OneSound oneSound) {
@@ -41,6 +43,7 @@ public class SpectrogramPanel extends JPanel {
                     this.minValue = val;
             }
         }
+        frequency = oneSound.getFrequency();
 
     }
 
@@ -60,6 +63,7 @@ public class SpectrogramPanel extends JPanel {
         g2.rotate(Math.PI/2.0);
         g2.drawString("częstotliwość", 0+10, 0-5);
         g2.rotate(-Math.PI/2.0);
+        g2.drawString(String.valueOf(frequency/2.0), 5, 5);
         
 
     }
