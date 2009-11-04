@@ -241,6 +241,38 @@ public class OneSound {
         waveDataFrame.validate();
     }
 
+    public void generateSound(int sampleRate) {
+        ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
+        ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
+        IntBuffer bufferLen1 = BufferUtils.newIntBuffer(256);
+        IntBuffer bufferLen2 = BufferUtils.newIntBuffer(256);
+
+        IntBuffer intBuffer = BufferUtils.newIntBuffer(256);
+        this.result = this.sound.getLength(intBuffer, FMOD_TIMEUNIT_PCMBYTES);
+        SoundUtils.ErrorCheck(result);
+
+        int size = intBuffer.get(0);
+        this.result = this.sound.lock(0, size, bufferPtr1, bufferPtr2,
+                bufferLen1, bufferLen2);
+        SoundUtils.ErrorCheck(result);
+
+        for (int i = 0; i < size/2; i++) {
+            bufferPtr1[0].put(intToByte((int)(32767.0*Math.sin(Math.PI*2.0*(double)i*(double)sampleRate/44100.0))));
+        }
+        bufferPtr1[0].rewind();
+        this.result = this.sound.unlock(bufferPtr1[0], null,
+                size, 0);
+        SoundUtils.ErrorCheck(result);
+
+    }
+
+    public static byte[] intToByte(int value) {
+        byte[] toRet = new byte[2];
+        toRet[1] = (byte) ((value << 16) >> 24);
+        toRet[0] = (byte) ((value << 24) >> 24);
+        return toRet;
+    }
+
     public static int unsignedByteToInt(byte[] b) {
         int toRet = 0;
         for (int i = 0; i < b.length; i++) {
