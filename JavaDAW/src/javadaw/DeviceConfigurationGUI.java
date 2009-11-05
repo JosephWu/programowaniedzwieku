@@ -39,6 +39,8 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         driversComboBox = new javax.swing.JComboBox();
         jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        recordDevicesComboBox = new javax.swing.JComboBox();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(javadaw.JavaDAWApp.class).getContext().getResourceMap(DeviceConfigurationGUI.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
@@ -62,6 +64,11 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+
+        recordDevicesComboBox.setName("recordDevicesComboBox"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -73,9 +80,11 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addComponent(jLabel2)
                         .addComponent(devicesComboBox, 0, 248, Short.MAX_VALUE)
-                        .addComponent(driversComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(driversComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addComponent(recordDevicesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jButton1))
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,8 +98,12 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(driversComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(recordDevicesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -101,6 +114,7 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
         this.jDAWEngine.deviceInfo.createSystem();
         this.jDAWEngine.deviceInfo.setDevice(this.getDevicesComboBox().getSelectedIndex());
         this.jDAWEngine.deviceInfo.setDriver(this.getDriversComboBox().getSelectedIndex());
+        this.jDAWEngine.recordDeviceInfo.setDevice(this.getRecordDevicesComboBox().getSelectedIndex());
         this.jDAWEngine.deviceInfo.init();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -110,6 +124,8 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JComboBox recordDevicesComboBox;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -138,6 +154,13 @@ public class DeviceConfigurationGUI extends javax.swing.JFrame {
      */
     public void setjComboBox2(javax.swing.JComboBox driversComboBox) {
         this.driversComboBox = driversComboBox;
+    }
+
+    /**
+     * @return the recordDevicesComboBox
+     */
+    public javax.swing.JComboBox getRecordDevicesComboBox() {
+        return recordDevicesComboBox;
     }
 
 }

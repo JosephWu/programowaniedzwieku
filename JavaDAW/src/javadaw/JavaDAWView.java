@@ -352,6 +352,7 @@ public class JavaDAWView extends FrameView {
         this.jDAWEngine.deviceInfo.createSystem();
         this.jDAWEngine.deviceInfo.getDrivers();
         this.jDAWEngine.deviceInfo.getDevices();
+        this.jDAWEngine.recordDeviceInfo.getDevices();
         this.jDAWEngine.deviceInfo.init();
         //this.jDAWEngine.deviceInfo.init();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -366,6 +367,10 @@ public class JavaDAWView extends FrameView {
             for (int i = 0; i < this.jDAWEngine.deviceInfo.drivers.size(); i++) {
                 deviceConfigurationGUI.getDriversComboBox()
                     .addItem(this.jDAWEngine.deviceInfo.drivers.get(i));
+            }
+            for (int i = 0; i < this.jDAWEngine.recordDeviceInfo.devices.size(); i++) {
+                deviceConfigurationGUI.getRecordDevicesComboBox()
+                    .addItem(this.jDAWEngine.recordDeviceInfo.devices.get(i));
             }
         }
         deviceConfigurationGUI.setVisible(true);
