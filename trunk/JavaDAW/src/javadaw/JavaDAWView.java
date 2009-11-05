@@ -133,6 +133,7 @@ public class JavaDAWView extends FrameView {
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem14 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -285,6 +286,15 @@ public class JavaDAWView extends FrameView {
             }
         });
         jMenu1.add(jMenuItem7);
+
+        jMenuItem14.setText(resourceMap.getString("jMenuItem14.text")); // NOI18N
+        jMenuItem14.setName("jMenuItem14"); // NOI18N
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem14);
 
         menuBar.add(jMenu1);
 
@@ -484,6 +494,20 @@ public class JavaDAWView extends FrameView {
         simpleAudioRecorder.stopRecording();
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+        if (this.oneSound != null) {
+            String s = (String)JOptionPane.showInputDialog(null,
+                    "Wpisz wartość progową:\n",
+                    "Próg", JOptionPane.INFORMATION_MESSAGE);
+            int[] tmp = this.oneSound.getCroseingsPlus(0, 256, Integer.parseInt(s));
+            for (int i = 0; i < tmp.length; i++) {
+                this.outputTextArea.append("Częstotliwość podstawowa dźwięku: " +
+                        tmp[i] / 2 + " Hz.\n");
+            }
+            this.oneSound.generateSoundPlus(tmp);
+        }
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemStreamed;
     private javax.swing.JMenu jMenu1;
@@ -494,6 +518,7 @@ public class JavaDAWView extends FrameView {
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
