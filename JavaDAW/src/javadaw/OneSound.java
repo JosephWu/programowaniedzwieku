@@ -184,24 +184,20 @@ public class OneSound {
             if (j == size/2-1)
                 break;
             bufferPtr1[0].get(dst);
-            if (unsignedByteToInt(dst) > block && below == true && j%2 == 0) {
+            if (unsignedByteToInt(dst) > block && below == true) {
                 if (!(distance-50 < actualDistance && actualDistance < distance+50)) {
                     changes++;
-                    distance = actualDistance;
-                    actualDistance = 0;
                 }
+                distance = actualDistance;
+                actualDistance = 0;
                 below = false;
-            } else if (unsignedByteToInt(dst) < block && below == false && j%2 == 0) {
-                if (!(distance-50 < actualDistance && actualDistance < distance+50)) {
-                    changes++;
-                    distance = actualDistance;
-                    actualDistance = 0;
-                }
+                actualDistance++;
+            } else if (unsignedByteToInt(dst) < block && below == false) {
                 below = true;
+                actualDistance++;
             } else {
                 actualDistance++;
             }
-            //System.out.println(unsignedByteToInt(dst));
             j++;
         }
         toRet = new int[changes];
