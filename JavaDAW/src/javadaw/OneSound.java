@@ -195,7 +195,7 @@ public class OneSound {
 
             for (int k = 0; k < blockSize; k++)
                 input[k] = new Complex(fourierValues[i+k]
-                        *(0.5 * (1 - Math.cos((2.0*Math.PI*(k-m))/(blockSize-1)))),
+                        *(0.5 * (1 - Math.cos((2.0*Math.PI*(k-i))/(blockSize-1)))),
                         0.0);
             DFT dft = new DFT();
             Complex[] calculatedDft = dft.fft(input);
