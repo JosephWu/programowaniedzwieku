@@ -14,6 +14,7 @@ import org.jouvieje.FmodEx.System;
 public class JDAWEngine {
 
     public DeviceInfo deviceInfo;
+    public RecordDeviceInfo recordDeviceInfo;
     private JavaDAWView javaDAWView;
     private System system;
 
@@ -21,6 +22,7 @@ public class JDAWEngine {
         this.javaDAWView = javaDAWView;
         this.deviceInfo = new DeviceInfo(javaDAWView);
         this.system = deviceInfo.getSystem();
+        this.recordDeviceInfo = new RecordDeviceInfo(javaDAWView, this);
     }
 
     public void setDriver(int no) {
