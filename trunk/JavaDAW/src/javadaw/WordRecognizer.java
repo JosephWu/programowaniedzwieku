@@ -20,13 +20,13 @@ import org.jouvieje.FmodEx.Sound;
  */
 public class WordRecognizer {
 
-    static Knn knn=new Knn();
-    private int featuresNumber=20;
+    static Knn knn = new Knn();
+    private int featuresNumber = 20;
     private Sound sound;
     private int bytesLength;
     public ArrayList<double[]> spectrogram;
     public int[] values;
-    private double silienceTreshold=0.1;
+    private double silienceTreshold = 0.1;
     private FMOD_RESULT result;
 
     public WordRecognizer(OneSound oneSound) {
@@ -52,48 +52,48 @@ public class WordRecognizer {
 
         //Wyliczanie wartości połaczone z detekcją ciszy
         byte[] dst = new byte[2];
-        int j=0;
-                while (true) {
-            if (j == size/4) {
+        int j = 0;
+        while (true) {
+            if (j == size / 4) {
                 break;
             }
             bufferPtr1[0].get(dst);
-            double f = ((OneSound.unsignedByteToInt(dst))/32767.0);
+            double f = ((OneSound.unsignedByteToInt(dst)) / 32767.0);
             bufferPtr1[0].get(dst);//Drugi kanał bo stereo :(
-                    //System.out.println("--------------- "+f);
+            //System.out.println("--------------- "+f);
 
-            if (Math.abs(f)>silienceTreshold){
+            if (Math.abs(f) > silienceTreshold) {
                 break;
             }
             j++;
         }
 
-        double[] fourierValues = new double[bytesLength / 4-j];
-        values = new int[bytesLength / 4-j];
-        j=0;
+        double[] fourierValues = new double[bytesLength / 4 - j];
+        values = new int[bytesLength / 4 - j];
+        j = 0;
         while (true) {
-            if (j == fourierValues.length-2) {
+            if (j == fourierValues.length - 2) {
                 break;
             }
             bufferPtr1[0].get(dst);
             values[j] = ((OneSound.unsignedByteToInt(dst)));
-            fourierValues[j] = ((OneSound.unsignedByteToInt(dst))/32767.0);
+            fourierValues[j] = ((OneSound.unsignedByteToInt(dst)) / 32767.0);
             bufferPtr1[0].get(dst);//Drugi kanał bo stereo :(
-           // System.out.println(fourierValues[j]);
+            // System.out.println(fourierValues[j]);
             j++;
         }
         //NA tym etapie tablica ma "wyciętą cisze z początku nagrania"
         //wycinamy ciszę z końca
-        
-        
-        for( j=fourierValues.length-1;j>=0;j--){
-            if(fourierValues[j]>silienceTreshold){
+
+
+        for (j = fourierValues.length - 1; j >= 0; j--) {
+            if (fourierValues[j] > silienceTreshold) {
                 break;
             }
         }
 
-        fourierValues=Arrays.copyOf(fourierValues, j+1);
-        values=Arrays.copyOf(values, j+1);
+        fourierValues = Arrays.copyOf(fourierValues, j + 1);
+        values = Arrays.copyOf(values, j + 1);
 
 
 
@@ -106,9 +106,9 @@ public class WordRecognizer {
 
         //For tests
         StringBuilder answer = new StringBuilder();
-        ArrayList<Double> frequency=new ArrayList<Double>();
-        for (int i = 0; i < fourierValues.length ; i += blockSize / overlap) {
-            if (i + blockSize > fourierValues.length ) {
+        ArrayList<Double> frequency = new ArrayList<Double>();
+        for (int i = 0; i < fourierValues.length; i += blockSize / overlap) {
+            if (i + blockSize > fourierValues.length) {
                 break;
             }
             Complex[] input = new Complex[blockSize];
@@ -122,16 +122,16 @@ public class WordRecognizer {
             double[] spectogramVertLine = dft.getSpectrum(calculatedDft);
             spectrogram.add(spectogramVertLine);
 
-            frequency.add(findPrazek(spectogramVertLine));            
+            frequency.add(findPrazek(spectogramVertLine));
         }
 
-        int a=0;
-        int e=0;
-        for(int i=0;i<frequency.size();i++){
-            if(frequency.get(i)>19000){
+        int a = 0;
+        int e = 0;
+        for (int i = 0; i < frequency.size(); i++) {
+            if (frequency.get(i) > 19000) {
                 //System.out.println("Wywalam "+frequency.get(i));
                 frequency.remove(i);
-                i=0;
+                i = 0;
             }
         }
 
@@ -149,7 +149,7 @@ public class WordRecognizer {
         int step = 1;
         int k = 0;
         //System.out.println("--------------------------------------------");
-        for (int i = 2; i < spectogramVertLine.length - step; i++) {
+        for (int i = 0; i < spectogramVertLine.length - step; i++) {
             double tmp = 0;
             //System.out.println(spectogramVertLine[i]);
             for (int j = 0; j < step; j++) {
@@ -166,86 +166,101 @@ public class WordRecognizer {
         return f;
     }
 
-    private double spectralCentroid(ArrayList<double[]> spectogram){
-       //na sztywno częstotliwosć próbkowania
-       //
-        double centroid=0;
-        for (double[] ds : spectogram) {
-            double cj=0;
-            double aj=0;
-            for(int i=0;i<ds.length;i++){
-                cj+=(22100*i/ds.length)*ds[i];
-                aj+=ds[i];
-            }
-            centroid+=cj/aj;
+    private ArrayList<Double> spectralCentroid(ArrayList<double[]> spectogram1) {
+
+
+        ArrayList<Double> f=new ArrayList<Double>();
+        double c= 0;
+        double a=0;
+        for (double[] ds : spectogram1) {
+                  double stft[]=ds;
+        for(int i=0;i<stft.length/2;i++){
+            c+=stft[i]*i*22050/stft.length;
+            a+=stft[i];
         }
-        return centroid/spectogram.size();
+        f.add(c/a);  
+        }
+        return f;
+
+
     }
 
-
-
-
     void addPattern(int label) {
-        Case case1=new Case();
+        Case case1 = new Case();
         case1.setLabel(label);
 
-        ArrayList<Double> f=start();
-        if(f.size()<featuresNumber){
-            int size=f.size();
-            for(int i=0;i<featuresNumber-size;i++){
+        ArrayList<Double> f=new ArrayList<Double>();
+        try{
+        f = spectralCentroid(spectrogram);
+        }catch(Exception e){
+            System.out.println("Mów głośniej");
+        }
+        
+        if (f.size() < featuresNumber) {
+            int size = f.size();
+            for (int i = 0; i < featuresNumber - size; i++) {
                 f.add(0.0);
             }
         }
-        for (int i=0;i<featuresNumber;i++) {
+        for (int i = 0; i < featuresNumber; i++) {
             case1.addFeature(f.get(i));
             System.out.println(f.get(i));
         }
- 
-        System.out.println("Label: "+label);
+
+        System.out.println("Label: " + label);
         knn.addTrainCase(case1);
-        }
+    }
 
     public int test() {
-        Case case1=new Case();
-
-        ArrayList<Double> f=start();
-        if(f.size()<featuresNumber){
-            int size=f.size();
-            for(int i=0;i<featuresNumber-size;i++){
+        Case case1 = new Case();
+        ArrayList<Double> f;
+        try {
+            f = start();
+             
+        } catch (Exception e) {
+            System.out.println("Mów głoścniej!!!");
+            return 0;
+        }
+       
+        if (f.size() < featuresNumber) {
+            int size = f.size();
+            for (int i = 0; i < featuresNumber - size; i++) {
                 f.add(0.0);
             }
         }
-        for (int i=0;i<featuresNumber;i++) {
+        for (int i = 0; i < featuresNumber; i++) {
             case1.addFeature(f.get(i));
         }
         knn.addTestCase(case1);
         return knn.run();
-        }
+    }
 
-        public int testWave(){
-            ArrayList<Double> freq=new ArrayList<Double>();
-            try{
-            freq=start();
-            }
-            catch(Exception e){
-                System.out.println("Prosze mówić głośniej");
-                return 0;
-            }
-            int a=0;
-            int e=0;
-            for (Double double1 : freq) {
-                if(Math.abs(double1-700)<100)
-                {a++;continue;}
-                if(Math.abs(double1-900)<100)
-                {e++;continue;}
-            }
-            if(a<2 || e<2){
-                return 0;
-            }
-            if(a>e){
-                return 1;
-            }
-            return 2;
+    public int testWave() {
+        ArrayList<Double> freq = new ArrayList<Double>();
+        try {
+            freq = start();
+        } catch (Exception e) {
+            System.out.println("Prosze mówić głośniej");
+            return 0;
         }
-    
+        int a = 0;
+        int e = 0;
+        for (Double double1 : freq) {
+            if (Math.abs(double1 - 700) < 100) {
+                a++;
+                continue;
+            }
+            if (Math.abs(double1 - 900) < 100) {
+                e++;
+                continue;
+            }
+        }
+        if (a < 2 || e < 2) {
+            return 0;
+        }
+        if (a > e) {
+            return 1;
+        }
+        return 2;
+    }
 }
