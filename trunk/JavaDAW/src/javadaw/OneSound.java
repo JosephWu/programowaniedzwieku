@@ -181,7 +181,9 @@ public class OneSound {
         int windowBlockSize = 44100/10;
         boolean canContinue = true;
         int i = 0;
+        int prevValue = 0;
         while (canContinue) {
+            
             int window = 0;
             byte[] dst = new byte[2];
             int j = 0;
@@ -214,7 +216,10 @@ public class OneSound {
                 }
                 j++;
             }
-            windowsValues.add(window*10);
+            if (prevValue-10 < window && window < prevValue + 10) {
+                windowsValues.add(window*10);
+                prevValue = window;
+            }
         }
 
         toRet = new int[windowsValues.size()];
@@ -443,7 +448,7 @@ public class OneSound {
         for (int i = 0; i < size/2; i++) {
             helper++;
             bufferPtr1[0].put(intToByte((int)(32767.0*Math.sin(Math.PI*2.0*(double)i*(double)sampleRates[k]/2/44100.0))));
-            if (helper == 44100*2/10) {
+            if (helper == 44100*2/20) {
                 k++;
                 helper = 0;
             }
