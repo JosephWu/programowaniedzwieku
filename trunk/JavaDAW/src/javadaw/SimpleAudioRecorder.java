@@ -47,10 +47,13 @@ public class SimpleAudioRecorder extends Thread {
     public void start() {
         m_line.start();
         super.start();
+        
+        
     }
 
     public void stopRecording() {
         m_line.stop();
+
         m_line.close();
     }
 
