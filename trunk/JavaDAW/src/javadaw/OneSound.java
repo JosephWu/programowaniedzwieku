@@ -390,5 +390,17 @@ public class OneSound {
         return path;
     }
 
+    public Sound getSound() {
+        return sound;
+    }
+
+    public void setBytesLength(int bytesLength) {
+        this.bytesLength = bytesLength;
+    }
+
+    public void setSamplesLength(int samplesLength) {
+        this.samplesLength = samplesLength;
+    }
+
 
 }

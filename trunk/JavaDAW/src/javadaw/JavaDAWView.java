@@ -1,7 +1,6 @@
 /*
  * JavaDAWView.java
  */
-
 package javadaw;
 
 import org.jdesktop.application.Action;
@@ -11,6 +10,8 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
@@ -26,6 +27,7 @@ public class JavaDAWView extends FrameView {
     private JDAWEngine jDAWEngine;
     private DeviceConfigurationGUI deviceConfigurationGUI;
     private OneSound oneSound;
+    private WordRecognizer wr;
     private SimpleAudioRecorder simpleAudioRecorder;
 
     public JavaDAWView(SingleFrameApplication app) {
@@ -37,6 +39,7 @@ public class JavaDAWView extends FrameView {
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 statusMessageLabel.setText("");
             }
@@ -47,6 +50,7 @@ public class JavaDAWView extends FrameView {
             busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
         }
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
                 statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
@@ -59,6 +63,7 @@ public class JavaDAWView extends FrameView {
         // connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 String propertyName = evt.getPropertyName();
                 if ("started".equals(propertyName)) {
@@ -75,11 +80,11 @@ public class JavaDAWView extends FrameView {
                     progressBar.setVisible(false);
                     progressBar.setValue(0);
                 } else if ("message".equals(propertyName)) {
-                    String text = (String)(evt.getNewValue());
+                    String text = (String) (evt.getNewValue());
                     statusMessageLabel.setText((text == null) ? "" : text);
                     messageTimer.restart();
                 } else if ("progress".equals(propertyName)) {
-                    int value = (Integer)(evt.getNewValue());
+                    int value = (Integer) (evt.getNewValue());
                     progressBar.setVisible(true);
                     progressBar.setIndeterminate(false);
                     progressBar.setValue(value);
@@ -137,9 +142,14 @@ public class JavaDAWView extends FrameView {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem17 = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JSeparator();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JSeparator();
+        jMenuItem15 = new javax.swing.JMenuItem();
+        jMenuItem16 = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -315,6 +325,18 @@ public class JavaDAWView extends FrameView {
         jMenu3.setText(resourceMap.getString("jMenu3.text")); // NOI18N
         jMenu3.setName("jMenu3"); // NOI18N
 
+        jMenuItem17.setText(resourceMap.getString("jMenuItem17.text")); // NOI18N
+        jMenuItem17.setName("jMenuItem17"); // NOI18N
+        jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem17ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem17);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        jMenu3.add(jSeparator2);
+
         jMenuItem11.setText(resourceMap.getString("jMenuItem11.text")); // NOI18N
         jMenuItem11.setName("jMenuItem11"); // NOI18N
         jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
@@ -341,6 +363,27 @@ public class JavaDAWView extends FrameView {
             }
         });
         jMenu3.add(jMenuItem13);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        jMenu3.add(jSeparator1);
+
+        jMenuItem15.setText(resourceMap.getString("jMenuItem15.text")); // NOI18N
+        jMenuItem15.setName("jMenuItem15"); // NOI18N
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem15);
+
+        jMenuItem16.setText(resourceMap.getString("jMenuItem16.text")); // NOI18N
+        jMenuItem16.setName("jMenuItem16"); // NOI18N
+        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem16ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem16);
 
         menuBar.add(jMenu3);
 
@@ -405,19 +448,16 @@ public class JavaDAWView extends FrameView {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        if(deviceConfigurationGUI == null) {
+        if (deviceConfigurationGUI == null) {
             deviceConfigurationGUI = new DeviceConfigurationGUI(jDAWEngine);
             for (int i = 0; i < this.jDAWEngine.deviceInfo.devices.size(); i++) {
-                deviceConfigurationGUI.getDevicesComboBox()
-                    .addItem(this.jDAWEngine.deviceInfo.devices.get(i));
+                deviceConfigurationGUI.getDevicesComboBox().addItem(this.jDAWEngine.deviceInfo.devices.get(i));
             }
             for (int i = 0; i < this.jDAWEngine.deviceInfo.drivers.size(); i++) {
-                deviceConfigurationGUI.getDriversComboBox()
-                    .addItem(this.jDAWEngine.deviceInfo.drivers.get(i));
+                deviceConfigurationGUI.getDriversComboBox().addItem(this.jDAWEngine.deviceInfo.drivers.get(i));
             }
             for (int i = 0; i < this.jDAWEngine.recordDeviceInfo.devices.size(); i++) {
-                deviceConfigurationGUI.getRecordDevicesComboBox()
-                    .addItem(this.jDAWEngine.recordDeviceInfo.devices.get(i));
+                deviceConfigurationGUI.getRecordDevicesComboBox().addItem(this.jDAWEngine.recordDeviceInfo.devices.get(i));
             }
         }
         deviceConfigurationGUI.setVisible(true);
@@ -427,43 +467,48 @@ public class JavaDAWView extends FrameView {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         SoundFileChooserGUI soundFileChooserGUI = new SoundFileChooserGUI();
         int tmp = soundFileChooserGUI.loadOpenDialog();
-        if (tmp == JFileChooser.CANCEL_OPTION || tmp == JFileChooser.ERROR_OPTION)
+        if (tmp == JFileChooser.CANCEL_OPTION || tmp == JFileChooser.ERROR_OPTION) {
             return;
+        }
         this.oneSound = new OneSound(jDAWEngine, soundFileChooserGUI.getPath(),
                 this.jCheckBoxMenuItemStreamed.getState());
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        if (this.oneSound != null)
+        if (this.oneSound != null) {
             this.oneSound.play();
+        }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        if (this.oneSound != null)
+        if (this.oneSound != null) {
             this.oneSound.pause();
+        }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        if (this.oneSound != null)
+        if (this.oneSound != null) {
             this.oneSound.stop();
+        }
         //this.jDAWEngine.deviceInfo.getSystem().release();
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         if (this.oneSound != null) {
-            String s = (String)JOptionPane.showInputDialog(null,
+            String s = (String) JOptionPane.showInputDialog(null,
                     "Wpisz wartość progową:\n",
                     "Próg", JOptionPane.INFORMATION_MESSAGE);
             int tmp = this.oneSound.getCroseings(0, 256, Integer.parseInt(s));
             this.outputTextArea.append("Częstotliwość podstawowa dźwięku: " +
                     tmp / 2 + " Hz.\n");
-            this.oneSound.generateSound(tmp/2);
+            this.oneSound.generateSound(tmp / 2);
         }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
-        if (this.oneSound != null)
+        if (this.oneSound != null) {
             this.oneSound.plotSpectogram();
+        }
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
@@ -496,7 +541,7 @@ public class JavaDAWView extends FrameView {
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
         if (this.oneSound != null) {
-            String s = (String)JOptionPane.showInputDialog(null,
+            String s = (String) JOptionPane.showInputDialog(null,
                     "Wpisz wartość progową:\n",
                     "Próg", JOptionPane.INFORMATION_MESSAGE);
             int[] tmp = this.oneSound.getCroseingsPlus(0, 256, Integer.parseInt(s));
@@ -508,6 +553,29 @@ public class JavaDAWView extends FrameView {
         }
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
+        wr = new WordRecognizer(os);
+        wr.addPattern(1);
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
+
+    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
+        OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
+        wr = new WordRecognizer(os);
+        wr.addPattern(2);
+    }//GEN-LAST:event_jMenuItem16ActionPerformed
+
+    private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
+
+        OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
+        wr = new WordRecognizer(os);
+        int result=wr.test();
+        switch (result){
+            case 1:System.out.println("TAK");break;
+            case 2:System.out.println("NIE");break;
+        }
+
+    }//GEN-LAST:event_jMenuItem17ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemStreamed;
     private javax.swing.JMenu jMenu1;
@@ -519,6 +587,9 @@ public class JavaDAWView extends FrameView {
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem15;
+    private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -529,6 +600,8 @@ public class JavaDAWView extends FrameView {
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JTextArea outputTextArea;
@@ -537,13 +610,11 @@ public class JavaDAWView extends FrameView {
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
     // End of variables declaration//GEN-END:variables
-
     private final Timer messageTimer;
     private final Timer busyIconTimer;
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
-
     private JDialog aboutBox;
 
     /**
