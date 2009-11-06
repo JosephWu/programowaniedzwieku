@@ -158,8 +158,74 @@ public class OneSound {
         return toRet;
     }
 
-
     public int[] getCroseingsPlus(int offset, int length, int block) {
+        int toRet[];
+        ArrayList<Integer> windowsValues = new ArrayList<Integer>();
+        this.indexes = new ArrayList<Integer>();
+
+        
+        ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
+        ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
+        IntBuffer bufferLen1 = BufferUtils.newIntBuffer(256);
+        IntBuffer bufferLen2 = BufferUtils.newIntBuffer(256);
+
+        IntBuffer intBuffer = BufferUtils.newIntBuffer(256);
+        this.result = this.sound.getLength(intBuffer, FMOD_TIMEUNIT_PCMBYTES);
+        SoundUtils.ErrorCheck(result);
+
+        int size = intBuffer.get(0);
+        this.result = this.sound.lock(offset, size, bufferPtr1, bufferPtr2,
+                bufferLen1, bufferLen2);
+        SoundUtils.ErrorCheck(result);
+
+        int windowBlockSize = 44100/10;
+        boolean canContinue = true;
+        int i = 0;
+        while (canContinue) {
+            int window = 0;
+            byte[] dst = new byte[2];
+            int j = 0;
+            i++; j++;
+            if (i == size / 2) {
+                canContinue = false;
+                break;
+            }
+            bufferPtr1[0].get(dst);
+            boolean below = false;
+            if (unsignedByteToInt(dst) < block) {
+                below = true;
+            }
+            while (true) {
+                if (j == windowBlockSize) {
+                    break;
+                }
+                i++;
+                if (i == size / 2) {
+                    canContinue = false;
+                    break;
+                }
+                bufferPtr1[0].get(dst);
+                if (unsignedByteToInt(dst) > block && below == true) {
+                    below = false;
+                    window++;
+                } else if (unsignedByteToInt(dst) < block && below == false) {
+                    below = true;
+                    window++;
+                }
+                j++;
+            }
+            windowsValues.add(window*10);
+        }
+
+        toRet = new int[windowsValues.size()];
+        for (int k = 0; k < toRet.length; k++) {
+            toRet[k] = windowsValues.get(k);
+        }
+
+        return toRet;
+    }
+
+    /**public int[] getCroseingsPlus(int offset, int length, int block) {
         int toRet[];
         ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
         ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
@@ -189,7 +255,7 @@ public class OneSound {
                 break;
             bufferPtr1[0].get(dst);
             if (unsignedByteToInt(dst) > block && below == true) {
-                if (!(distance - 50 < actualDistance && actualDistance < distance + 50)) {
+                if (!(distance - 20 < actualDistance && actualDistance < distance + 20)) {
                     minimumDistance++;
                     if (minimumDistance > 100) {
                         changes++;
@@ -242,7 +308,10 @@ public class OneSound {
 
         
         return toRet;
-    }
+    }**/
+
+
+
 
 
     public void plotSpectogram() {
@@ -370,12 +439,13 @@ public class OneSound {
                 bufferLen1, bufferLen2);
         SoundUtils.ErrorCheck(result);
 
-        int k = 0;
+        int k = 0; int helper = 0;
         for (int i = 0; i < size/2; i++) {
+            helper++;
             bufferPtr1[0].put(intToByte((int)(32767.0*Math.sin(Math.PI*2.0*(double)i*(double)sampleRates[k]/2/44100.0))));
-            if (i == indexes.get(k)) {
-                if (indexes.size() > k+1)
-                    k++;
+            if (helper == 44100*2/10) {
+                k++;
+                helper = 0;
             }
         }
         bufferPtr1[0].rewind();
