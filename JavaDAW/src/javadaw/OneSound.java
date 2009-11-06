@@ -44,6 +44,8 @@ public class OneSound {
 
     private String path;
 
+    private ArrayList<Integer> indexes;
+
     public OneSound(JDAWEngine jDAWEngine, String path, boolean streamed) {
         this.jDAWEngine = jDAWEngine;
         this.streamed = streamed;
@@ -177,16 +179,23 @@ public class OneSound {
         int j = 0;
         bufferPtr1[0].get(dst);
         boolean below = false;
+        indexes = new ArrayList<Integer>();
         if (unsignedByteToInt(dst) < block)
             below = true;
         int changes = 0; int distance = 0; int actualDistance = 0;
+        int minimumDistance = 0;
         while (true) {
             if (j == size/2-1)
                 break;
             bufferPtr1[0].get(dst);
             if (unsignedByteToInt(dst) > block && below == true) {
-                if (!(distance-50 < actualDistance && actualDistance < distance+50)) {
-                    changes++;
+                if (!(distance - 50 < actualDistance && actualDistance < distance + 50)) {
+                    minimumDistance++;
+                    if (minimumDistance > 100) {
+                        changes++;
+                        indexes.add(j);
+                        minimumDistance = 0;
+                    }
                 }
                 distance = actualDistance;
                 actualDistance = 0;
@@ -200,7 +209,38 @@ public class OneSound {
             }
             j++;
         }
-        toRet = new int[changes];
+        toRet = new int[changes+1];
+
+
+        j = 0;
+        int endJ = indexes.get(0);
+        bufferPtr1[0].rewind();
+        bufferPtr1[0].get(dst);
+        int nextSoundGen = 0;
+        if (unsignedByteToInt(dst) < block)
+            below = true;
+        while (true) {
+            if (j == size/2-1)
+                break;
+            bufferPtr1[0].get(dst);
+            if (unsignedByteToInt(dst) > block && below == true) {
+                below = false;
+                toRet[nextSoundGen]++;
+            } else if (unsignedByteToInt(dst) < block && below == false) {
+                below = true;
+                toRet[nextSoundGen]++;
+            }
+            if (j == endJ) {
+                nextSoundGen++;
+                if(indexes.size() > nextSoundGen) {
+                    endJ = indexes.get(nextSoundGen);
+                }
+            }
+            //System.out.println(unsignedByteToInt(dst));
+            j++;
+        }
+
+        
         return toRet;
     }
 
@@ -330,8 +370,13 @@ public class OneSound {
                 bufferLen1, bufferLen2);
         SoundUtils.ErrorCheck(result);
 
+        int k = 0;
         for (int i = 0; i < size/2; i++) {
-            bufferPtr1[0].put(intToByte((int)(32767.0*Math.sin(Math.PI*2.0*(double)i*(double)sampleRates[0]/44100.0))));
+            bufferPtr1[0].put(intToByte((int)(32767.0*Math.sin(Math.PI*2.0*(double)i*(double)sampleRates[k]/2/44100.0))));
+            if (i == indexes.get(k)) {
+                if (indexes.size() > k+1)
+                    k++;
+            }
         }
         bufferPtr1[0].rewind();
         this.result = this.sound.unlock(bufferPtr1[0], null,
