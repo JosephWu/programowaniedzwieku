@@ -21,7 +21,7 @@ import org.jouvieje.FmodEx.Sound;
 public class WordRecognizer {
 
     static Knn knn=new Knn();
-    private int featuresNumber=6;
+    private int featuresNumber=20;
     private Sound sound;
     private int bytesLength;
     public ArrayList<double[]> spectrogram;
@@ -98,7 +98,7 @@ public class WordRecognizer {
 
 
 
-        int blockSize = (int) Math.pow(2, Math.floor(log2(fourierValues.length / 4)));
+        int blockSize = (int) Math.pow(2, Math.floor(log2(fourierValues.length / 16)));
         int overlap = 2;
 
 
@@ -192,7 +192,7 @@ public class WordRecognizer {
         ArrayList<Double> f=start();
         if(f.size()<featuresNumber){
             int size=f.size();
-            for(int i=0;i<6-size;i++){
+            for(int i=0;i<featuresNumber-size;i++){
                 f.add(0.0);
             }
         }
@@ -201,7 +201,7 @@ public class WordRecognizer {
             System.out.println(f.get(i));
         }
  
-        System.out.println("Label: 1");
+        System.out.println("Label: "+label);
         knn.addTrainCase(case1);
         }
 
@@ -211,7 +211,7 @@ public class WordRecognizer {
         ArrayList<Double> f=start();
         if(f.size()<featuresNumber){
             int size=f.size();
-            for(int i=0;i<6-size;i++){
+            for(int i=0;i<featuresNumber-size;i++){
                 f.add(0.0);
             }
         }
@@ -222,5 +222,30 @@ public class WordRecognizer {
         return knn.run();
         }
 
+        public int testWave(){
+            ArrayList<Double> freq=new ArrayList<Double>();
+            try{
+            freq=start();
+            }
+            catch(Exception e){
+                System.out.println("Prosze mówić głośniej");
+                return 0;
+            }
+            int a=0;
+            int e=0;
+            for (Double double1 : freq) {
+                if(Math.abs(double1-700)<100)
+                {a++;continue;}
+                if(Math.abs(double1-900)<100)
+                {e++;continue;}
+            }
+            if(a<2 || e<2){
+                return 0;
+            }
+            if(a>e){
+                return 1;
+            }
+            return 2;
+        }
     
 }

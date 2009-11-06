@@ -566,13 +566,14 @@ public class JavaDAWView extends FrameView {
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
-
+        
         OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
         wr = new WordRecognizer(os);
-        int result=wr.test();
+        int result=wr.testWave();
         switch (result){
             case 1:System.out.println("TAK");break;
             case 2:System.out.println("NIE");break;
+            default:System.out.println("Nie rozpoznano");
         }
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
