@@ -159,10 +159,6 @@ public class OneSound {
     }
 
     public int[] getCroseingsPlus(int offset, int length, int block) {
-        int toRet[];
-        ArrayList<Integer> windowsValues = new ArrayList<Integer>();
-        this.indexes = new ArrayList<Integer>();
-
         
         ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
         ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
@@ -178,55 +174,76 @@ public class OneSound {
                 bufferLen1, bufferLen2);
         SoundUtils.ErrorCheck(result);
 
-        int windowBlockSize = 44100/10;
-        boolean canContinue = true;
-        int i = 0;
-        int prevValue = 0;
-        while (canContinue) {
-            
-            int window = 0;
-            byte[] dst = new byte[2];
-            int j = 0;
-            i++; j++;
-            if (i == size / 2) {
-                canContinue = false;
+        byte[] dst = new byte[2];
+        int[] tmpSound = new int[size/2];
+        int[] toRet = new int[size/2];
+
+        int j = 0;
+        while (true) {
+            if (j == size / 2) {
                 break;
             }
             bufferPtr1[0].get(dst);
+            tmpSound[j] = unsignedByteToInt(dst);
+            j++;
+        }
+
+
+        int n = 0;
+        int wndSize = 44100 / 8;
+        int outResult = 0; int prevOutResult = 0;
+        ArrayList<Integer> cutTimeList = new ArrayList<Integer>();
+        ArrayList<Integer> frequencyList = new ArrayList<Integer>();
+        ArrayList<Integer> tmpFrequencyList = new ArrayList<Integer>();
+        while (n+wndSize < tmpSound.length) {
+            int k = 0;
             boolean below = false;
-            if (unsignedByteToInt(dst) < block) {
+            int founded = 0;
+            if ((tmpSound[k + n]) < block) {
                 below = true;
             }
-            while (true) {
-                if (j == windowBlockSize) {
-                    break;
-                }
-                i++;
-                if (i == size / 2) {
-                    canContinue = false;
-                    break;
-                }
-                bufferPtr1[0].get(dst);
-                if (unsignedByteToInt(dst) > block && below == true) {
+            k++;
+            while (k < wndSize) {
+                if (tmpSound[k + n] > block && below == true) {
                     below = false;
-                    window++;
-                } else if (unsignedByteToInt(dst) < block && below == false) {
+                    founded++;
+                } else if (tmpSound[k + n] < block && below == false) {
                     below = true;
-                    window++;
+                    founded++;
                 }
-                j++;
+                k++;
             }
-            if (prevValue-10 < window && window < prevValue + 10) {
-                windowsValues.add(window*10);
-                prevValue = window;
+            outResult = founded * 8;
+            if (n == 0) {
+                prevOutResult = outResult;
+                cutTimeList.add(0);
+                frequencyList.add(prevOutResult);
+                tmpFrequencyList.add(prevOutResult);
             }
+            else
+                if (!(prevOutResult-100 < outResult && prevOutResult+100 > outResult)) {
+                    cutTimeList.add(n);
+                    int buff = 0;
+                    for (int i = 0; i < tmpFrequencyList.size(); i++)
+                        buff += tmpFrequencyList.get(i);
+                    frequencyList.add(buff/tmpFrequencyList.size());
+                    tmpFrequencyList.clear();
+                }
+            prevOutResult = outResult;
+            tmpFrequencyList.add(prevOutResult);
+            n = n + 44100 / 8 / 2;
         }
-
-        toRet = new int[windowsValues.size()];
-        for (int k = 0; k < toRet.length; k++) {
-            toRet[k] = windowsValues.get(k);
+        frequencyList.add(prevOutResult);
+        cutTimeList.add(n);
+        cutTimeList.add(0);
+        
+        int pos = 0;
+        for (int i = 0; i < toRet.length; i++) {
+            if (cutTimeList.get(pos) == i)
+                pos++;
+            toRet[i] = frequencyList.get(pos-1);
         }
-
+        
         return toRet;
     }
 
@@ -444,14 +461,8 @@ public class OneSound {
                 bufferLen1, bufferLen2);
         SoundUtils.ErrorCheck(result);
 
-        int k = 0; int helper = 0;
         for (int i = 0; i < size/2; i++) {
-            helper++;
-            bufferPtr1[0].put(intToByte((int)(32767.0*Math.sin(Math.PI*2.0*(double)i*(double)sampleRates[k]/2/44100.0))));
-            if (helper == 44100*2/20) {
-                k++;
-                helper = 0;
-            }
+            bufferPtr1[0].put(intToByte((int)(32767.0*Math.sin(Math.PI*2.0*(double)i*(double)sampleRates[i]/2/44100.0))));
         }
         bufferPtr1[0].rewind();
         this.result = this.sound.unlock(bufferPtr1[0], null,
