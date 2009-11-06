@@ -14,6 +14,20 @@ import org.jouvieje.FmodEx.Enumerations.FMOD_RESULT;
 import org.jouvieje.FmodEx.Misc.BufferUtils;
 import org.jouvieje.FmodEx.Sound;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.TargetDataLine;
+
+
 /**
  *
  * @author Stach
@@ -29,6 +43,30 @@ public class WordRecognizer {
     private double silienceTreshold = 0.1;
     private FMOD_RESULT result;
 
+    private int treshold=140;
+    //Nagrywanie
+        boolean stopCapture = false;
+    byte[] streamData;
+    ByteArrayOutputStream byteArrayOutputStream;
+    AudioFormat audioFormat;
+    TargetDataLine targetDataLine;
+    AudioInputStream audioInputStream;
+    SourceDataLine sourceDataLine;
+    File file;
+    String outputFileName;
+    static int time = 2000;
+    static int seconds = 2;
+    static int channels = 1;
+    /** bytes - 1 means 8 bit, 2 means 16 bit, 3 means 24 bit. */
+    static int bytes = 1;
+    /** Samples per second, sample rate in Hertz. */
+    static int samplerate = 8000;
+    static int size = samplerate * channels * bytes * 60 * seconds;
+    static int timeperiod = 20;
+    //static byte tempBuffer[] = new byte[samplerate * channels * bytes / timeperiod];
+    static byte tempBuffer[] = new byte[512];
+    //
+
     public WordRecognizer(OneSound oneSound) {
         this.sound = oneSound.getSound();
         this.bytesLength = (int) oneSound.getBytesLength();
@@ -36,76 +74,42 @@ public class WordRecognizer {
     }
 
     public ArrayList<Double> start() {
-        ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
-        ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
-        IntBuffer bufferLen1 = BufferUtils.newIntBuffer(256);
-        IntBuffer bufferLen2 = BufferUtils.newIntBuffer(256);
-
-        IntBuffer intBuffer = BufferUtils.newIntBuffer(256);
-
-
-        int size = bytesLength;
-        this.result = this.sound.lock(0, size, bufferPtr1, bufferPtr2,
-                bufferLen1, bufferLen2);
-        SoundUtils.ErrorCheck(result);
+//        ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
+//        ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
+//        IntBuffer bufferLen1 = BufferUtils.newIntBuffer(256);
+//        IntBuffer bufferLen2 = BufferUtils.newIntBuffer(256);
+//
+//        IntBuffer intBuffer = BufferUtils.newIntBuffer(256);
 
 
-        //Wyliczanie wartości połaczone z detekcją ciszy
-        byte[] dst = new byte[2];
+        
+//        this.result = this.sound.lock(0, size, bufferPtr1, bufferPtr2,
+//                bufferLen1, bufferLen2);
+//        SoundUtils.ErrorCheck(result);
+
+
+        //Wyliczanie
         int j = 0;
-        while (true) {
-            if (j == size / 4) {
-                break;
-            }
-            bufferPtr1[0].get(dst);
-            double f = ((OneSound.unsignedByteToInt(dst)) / 32767.0);
-            bufferPtr1[0].get(dst);//Drugi kanał bo stereo :(
-            //System.out.println("--------------- "+f);
-
-            if (Math.abs(f) > silienceTreshold) {
-                break;
-            }
-            j++;
-        }
-
-        double[] fourierValues = new double[bytesLength / 4 - j];
-        values = new int[bytesLength / 4 - j];
+        size=streamData.length;
+        double[] fourierValues = new double[size];
+        values = new int[size];
         j = 0;
         while (true) {
-            if (j == fourierValues.length - 2) {
+            if (j == size) {
                 break;
             }
-            bufferPtr1[0].get(dst);
-            values[j] = ((OneSound.unsignedByteToInt(dst)));
-            fourierValues[j] = ((OneSound.unsignedByteToInt(dst)) / 32767.0);
-            bufferPtr1[0].get(dst);//Drugi kanał bo stereo :(
-            // System.out.println(fourierValues[j]);
+            values[j] = (streamData[j]);
+            fourierValues[j] = ((double)(streamData[j]) / 127.0);
             j++;
         }
-        //NA tym etapie tablica ma "wyciętą cisze z początku nagrania"
-        //wycinamy ciszę z końca
 
 
-        for (j = fourierValues.length - 1; j >= 0; j--) {
-            if (fourierValues[j] > silienceTreshold) {
-                break;
-            }
-        }
-
-        fourierValues = Arrays.copyOf(fourierValues, j + 1);
-        values = Arrays.copyOf(values, j + 1);
-
-
-
-
-        int blockSize = (int) Math.pow(2, Math.floor(log2(fourierValues.length / 16)));
+        int blockSize = 512;
         int overlap = 2;
 
 
         spectrogram = new ArrayList<double[]>();
 
-        //For tests
-        StringBuilder answer = new StringBuilder();
         ArrayList<Double> frequency = new ArrayList<Double>();
         for (int i = 0; i < fourierValues.length; i += blockSize / overlap) {
             if (i + blockSize > fourierValues.length) {
@@ -125,17 +129,20 @@ public class WordRecognizer {
             frequency.add(findPrazek(spectogramVertLine));
         }
 
-        int a = 0;
-        int e = 0;
-        for (int i = 0; i < frequency.size(); i++) {
-            if (frequency.get(i) > 19000) {
-                //System.out.println("Wywalam "+frequency.get(i));
-                frequency.remove(i);
-                i = 0;
-            }
+//        int a = 0;
+//        int e = 0;
+//        for (int i = 0; i < frequency.size(); i++) {
+//            if (frequency.get(i) > 19000) {
+//                //System.out.println("Wywalam "+frequency.get(i));
+//                frequency.remove(i);
+//                i = 0;
+//            }
+//        }
+
+        for (Double double1 : frequency) {
+            System.out.println(double1);
         }
-
-
+        System.out.println("adldasffjdlanald");
         return frequency;
 
     }
@@ -149,7 +156,7 @@ public class WordRecognizer {
         int step = 1;
         int k = 0;
         //System.out.println("--------------------------------------------");
-        for (int i = 0; i < spectogramVertLine.length - step; i++) {
+        for (int i = 0; i < spectogramVertLine.length/2; i++) {
             double tmp = 0;
             //System.out.println(spectogramVertLine[i]);
             for (int j = 0; j < step; j++) {
@@ -160,7 +167,7 @@ public class WordRecognizer {
                 k = i;
             }
         }
-        f = k * 22100 / spectogramVertLine.length;
+        f = k * 8000 / spectogramVertLine.length;
         //System.out.println(k);
 
         return f;
@@ -175,7 +182,7 @@ public class WordRecognizer {
         for (double[] ds : spectogram1) {
                   double stft[]=ds;
         for(int i=0;i<stft.length/2;i++){
-            c+=stft[i]*i*22050/stft.length;
+            c+=stft[i]*i*4000/stft.length;
             a+=stft[i];
         }
         f.add(c/a);  
@@ -262,5 +269,141 @@ public class WordRecognizer {
             return 1;
         }
         return 2;
+    }
+    //
+        public static void main(String[] args) {
+        /*Recorder grabador =  new Recorder("foo1.wav",4,1,16000,3000);
+        grabador.AudioRecorder();*/
+    }
+
+    public void AudioRecorder() {
+        captureAudio();
+
+    }
+
+    public void captureAudio() {
+        try {
+            audioFormat = getAudioFormat();
+            DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+            targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
+            targetDataLine.open(audioFormat);
+            targetDataLine.start();
+
+            audioInputStream = new AudioInputStream(targetDataLine);
+            CaptureThread ct = new CaptureThread();
+            Thread captureThread = new Thread(ct);
+            captureThread.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+    }
+
+
+
+    private AudioFormat getAudioFormat() {
+        float sampleRate = 8000;
+        int sampleSizeInBits = 8;
+        boolean signed = true;
+        boolean bigEndian = false;
+        return new AudioFormat(sampleRate, sampleSizeInBits, 1, signed, bigEndian);
+    }
+
+    class CaptureThread extends Thread {
+
+        @Override
+        public void run() {
+            byteArrayOutputStream = new ByteArrayOutputStream(size);
+            stopCapture = false;
+            boolean recording = false;
+
+            int silenceSegment = 0;
+            try {
+                //Tutaj dostajemy bajty danych
+
+                while (!stopCapture) {
+                    int cnt = targetDataLine.read(tempBuffer, 0, tempBuffer.length);
+                    if (cnt > 0) {
+                        //System.out.println(sr.energy(tempBuffer));
+                        if (energy(tempBuffer)>treshold) {//Tu warunek na ciszę
+                            silenceSegment = 0;
+                            recording = true;
+                            System.out.println("Wykryto mowę");
+                            byteArrayOutputStream.write(tempBuffer, 0, cnt);
+
+                        } else {
+                            if (recording) {
+                                silenceSegment++;
+                                //System.out.println(silenceSegment);
+                                if (silenceSegment == 4) {
+                                    stopCapture = true;
+                                    System.out.println("Koniec nagrania");
+                                    //this will stop the recording
+                                    targetDataLine.close();
+
+                                }
+                                byteArrayOutputStream.write(tempBuffer, 0, cnt);
+                            }
+                        }
+                    }
+                }
+                byteArrayOutputStream.close();
+                streamData=byteArrayOutputStream.toByteArray();
+                System.out.println(streamData.length);
+                WordRecognizer.this.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
+        }
+
+        private double energy(byte[] tempBuffer) {
+            double energy=0;
+            for(int i=0;i<tempBuffer.length;i++){
+    
+            //System.out.println(tempBuffer[i]);
+            energy+=Math.pow(tempBuffer[i],2);
+            }
+            //System.out.println(energy);
+            return energy;
+        }
+    }
+
+    private class SaveThread extends Thread {
+
+        @Override
+        public void run() {
+            try {
+                if (AudioSystem.isFileTypeSupported(AudioFileFormat.Type.WAVE, audioInputStream)) {
+                    AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, file);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
+        }
+    }
+
+    public void stop() {
+        Stop stop = new Stop();
+        Thread stoped = new Thread(stop);
+        stoped.start();
+    }
+
+    private class Stop extends Thread {
+
+        @Override
+        public void run() {
+            try {
+                stopCapture = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
+        }
+    }
+
+    private void silenceDetection() {
     }
 }
