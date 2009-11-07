@@ -124,6 +124,11 @@ public class JavaDAWView extends FrameView {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         outputTextArea = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -144,7 +149,6 @@ public class JavaDAWView extends FrameView {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem17 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JSeparator();
-        jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JSeparator();
@@ -171,16 +175,79 @@ public class JavaDAWView extends FrameView {
         outputTextArea.setName("outputTextArea"); // NOI18N
         jScrollPane1.setViewportView(outputTextArea);
 
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
+        jButton2.setName("jButton2"); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
+        jButton3.setName("jButton3"); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
+        jButton4.setName("jButton4"); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(520, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2))
+                .addGap(81, 81, 81))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(497, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(56, 56, 56))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(522, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addGap(75, 75, 75))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(251, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -337,15 +404,6 @@ public class JavaDAWView extends FrameView {
         jSeparator2.setName("jSeparator2"); // NOI18N
         jMenu3.add(jSeparator2);
 
-        jMenuItem11.setText(resourceMap.getString("jMenuItem11.text")); // NOI18N
-        jMenuItem11.setName("jMenuItem11"); // NOI18N
-        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem11ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem11);
-
         jMenuItem12.setText(resourceMap.getString("jMenuItem12.text")); // NOI18N
         jMenuItem12.setName("jMenuItem12"); // NOI18N
         jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
@@ -411,11 +469,11 @@ public class JavaDAWView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
+            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
             .addGroup(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 456, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 490, Short.MAX_VALUE)
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusAnimationLabel)
@@ -442,9 +500,9 @@ public class JavaDAWView extends FrameView {
         this.jDAWEngine.deviceInfo.createSystem();
         this.jDAWEngine.deviceInfo.getDrivers();
         this.jDAWEngine.deviceInfo.getDevices();
-        this.jDAWEngine.recordDeviceInfo.getDevices();
+        //this.jDAWEngine.recordDeviceInfo.getDevices();
         this.jDAWEngine.deviceInfo.init();
-        //this.jDAWEngine.deviceInfo.init();
+        this.jDAWEngine.deviceInfo.init();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -456,9 +514,9 @@ public class JavaDAWView extends FrameView {
             for (int i = 0; i < this.jDAWEngine.deviceInfo.drivers.size(); i++) {
                 deviceConfigurationGUI.getDriversComboBox().addItem(this.jDAWEngine.deviceInfo.drivers.get(i));
             }
-            for (int i = 0; i < this.jDAWEngine.recordDeviceInfo.devices.size(); i++) {
-                deviceConfigurationGUI.getRecordDevicesComboBox().addItem(this.jDAWEngine.recordDeviceInfo.devices.get(i));
-            }
+//            for (int i = 0; i < this.jDAWEngine.recordDeviceInfo.devices.size(); i++) {
+//                deviceConfigurationGUI.getRecordDevicesComboBox().addItem(this.jDAWEngine.recordDeviceInfo.devices.get(i));
+//            }
         }
         deviceConfigurationGUI.setVisible(true);
 
@@ -524,17 +582,6 @@ public class JavaDAWView extends FrameView {
         }
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
-    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-        SoundRecorder soundRecorder = new SoundRecorder(jDAWEngine);
-        soundRecorder.init();
-        soundRecorder.startRecording();
-    }//GEN-LAST:event_jMenuItem11ActionPerformed
-
-    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        simpleAudioRecorder = new SimpleAudioRecorder();
-        simpleAudioRecorder.start();
-    }//GEN-LAST:event_jMenuItem12ActionPerformed
-
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         simpleAudioRecorder.stopRecording();
     }//GEN-LAST:event_jMenuItem13ActionPerformed
@@ -546,8 +593,8 @@ public class JavaDAWView extends FrameView {
                     "Próg", JOptionPane.INFORMATION_MESSAGE);
             int[] tmp = this.oneSound.getCroseingsPlus(0, 256, Integer.parseInt(s));
             //for (int i = 0; i < tmp.length; i++) {
-              //  this.outputTextArea.append("Częstotliwość podstawowa dźwięku: " +
-                //        tmp[i] / 2 + " Hz.\n");
+            //  this.outputTextArea.append("Częstotliwość podstawowa dźwięku: " +
+            //        tmp[i] / 2 + " Hz.\n");
             //}
             this.oneSound.generateSoundPlus(tmp);
         }
@@ -556,7 +603,8 @@ public class JavaDAWView extends FrameView {
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
         OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
         wr = new WordRecognizer(os);
-        wr.addPattern(1);
+        
+
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
@@ -566,25 +614,63 @@ public class JavaDAWView extends FrameView {
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
-        
+
         OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
         wr = new WordRecognizer(os);
-        int result=wr.testWave();
-        switch (result){
-            case 1:System.out.println("TAK");break;
-            case 2:System.out.println("NIE");break;
-            default:System.out.println("Nie rozpoznano");
+        int result = wr.test();
+        switch (result) {
+            case 1:
+                System.out.println("TAK");
+                break;
+            case 2:
+                System.out.println("NIE");
+                break;
+            default:
+                System.out.println("Nie rozpoznano");
         }
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        simpleAudioRecorder = new SimpleAudioRecorder();
+        simpleAudioRecorder.start();
+}//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        WordRecognizer wr = new WordRecognizer();
+        wr.audioRecorderStart(0);
+ 
+
+
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        wr = new WordRecognizer();
+        wr.audioRecorderStart(1);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        wr = new WordRecognizer();
+        wr.audioRecorderStart(2);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+       wr.stop();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemStreamed;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
