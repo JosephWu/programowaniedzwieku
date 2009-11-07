@@ -75,6 +75,7 @@ public class Knn {
     */
     public int chooseBest(int testCaseNumber) {
         Collections.sort(this.distances);
+        Collections.reverse(this.distances);
         return this.distances.get(0).getLabel();
     }
 

@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javadaw.recogntion.Case;
 import javadaw.recogntion.Knn;
+import javax.swing.JLabel;
 import org.jouvieje.FmodEx.Enumerations.FMOD_RESULT;
 import org.jouvieje.FmodEx.Misc.BufferUtils;
 import org.jouvieje.FmodEx.Sound;
@@ -49,7 +50,8 @@ public class WordRecognizer {
     private double silienceTreshold = 0.1;
     private FMOD_RESULT result;
     private String fileName = "trening.txt";
-    private int treshold = 120;
+    private int treshold = 140;
+    private JLabel jresult;
     //Nagrywanie
     boolean stopCapture = false;
     byte[] streamData;
@@ -113,7 +115,7 @@ public class WordRecognizer {
 
 
         int blockSize = 512;
-        int overlap = 2;
+        int overlap = 1;
 
 
         spectrogram = new ArrayList<double[]>();
@@ -147,9 +149,7 @@ public class WordRecognizer {
 //            }
 //        }
         ArrayList<Double> centroids = spectralCentroid(spectrogram);
-        for (Double double1 : centroids) {
-            System.out.println(double1);
-        }
+
         plotSpectrum();
         return centroids;
 
@@ -190,66 +190,17 @@ public class WordRecognizer {
         for (double[] ds : spectogram1) {
             double stft[] = ds;
             for (int i = 0; i < stft.length / 2; i++) {
-                c += stft[i] * i * 4000 / stft.length;
+                c += stft[i] * i * 8000.0 / stft.length;
+                //System.out.println(stft[i]);
                 a += stft[i];
             }
+            //System.out.println("--------------------------");
             f.add(c / a);
         }
         return f;
 
 
     }
-
-    void addPattern(int label) {
-        Case case1 = new Case();
-        case1.setLabel(label);
-
-        ArrayList<Double> f = new ArrayList<Double>();
-        try {
-            f = spectralCentroid(spectrogram);
-        } catch (Exception e) {
-            System.out.println("Mów głośniej");
-        }
-
-        if (f.size() < featuresNumber) {
-            int size = f.size();
-            for (int i = 0; i < featuresNumber - size; i++) {
-                f.add(0.0);
-            }
-        }
-        for (int i = 0; i < featuresNumber; i++) {
-            case1.addFeature(f.get(i));
-            System.out.println(f.get(i));
-        }
-
-        System.out.println("Label: " + label);
-        knn.addTrainCase(case1);
-    }
-
-    public int test() {
-        Case case1 = new Case();
-        ArrayList<Double> f;
-        try {
-            f = start();
-
-        } catch (Exception e) {
-            System.out.println("Mów głoścniej!!!");
-            return 0;
-        }
-
-        if (f.size() < featuresNumber) {
-            int size = f.size();
-            for (int i = 0; i < featuresNumber - size; i++) {
-                f.add(0.0);
-            }
-        }
-        for (int i = 0; i < featuresNumber; i++) {
-            case1.addFeature(f.get(i));
-        }
-        knn.addTestCase(case1);
-        return knn.run();
-    }
-
 
     //
 
@@ -258,8 +209,8 @@ public class WordRecognizer {
         grabador.AudioRecorder();*/
     }
 
-    public void audioRecorderStart(int label) {
-        captureAudio(label);
+    public void audioRecorderStart(int label, JLabel result) {
+        captureAudio(label);jresult=result;
 
     }
 
@@ -290,6 +241,8 @@ public class WordRecognizer {
         return new AudioFormat(sampleRate, sampleSizeInBits, 1, signed, bigEndian);
     }
 
+
+
     class CaptureThread extends Thread {
 
         int label = 0;
@@ -308,44 +261,47 @@ public class WordRecognizer {
             stopCapture = false;
             boolean recording = false;
             int silenceMax = 4;
-            int voiceMin=5;
+            int voiceMin=7;
             int silenceSegment = 0;
             int voiceSegments=0;
             try {
                 //Tutaj dostajemy bajty danych
 
-                while (!stopCapture) {
+                while (!stopCapture && voiceSegments<8) {
                     int cnt = targetDataLine.read(tempBuffer, 0, tempBuffer.length);
-                    if (cnt > 0) {
+                    if (cnt > 0 ) {
                         //System.out.println(sr.energy(tempBuffer));
                         if (energy(tempBuffer) > treshold) {//Tu warunek na ciszę
                             silenceSegment = 0;
                             voiceSegments++;
                             recording = true;
-                            System.out.println("Wykryto mowę");
+                            //System.out.println("Wykryto mowę");
                             byteArrayOutputStream.write(tempBuffer, 0, cnt);
-
-                        } else {
+                            continue;
+                        } //else {
                             if (recording) {
-                                silenceSegment++;
-                                //System.out.println(silenceSegment);
-                                if (silenceSegment == silenceMax && voiceSegments>voiceMin) {
-                                    
-                                    System.out.println("Koniec nagrania");
-                                    //this will stop the recording
-                                    targetDataLine.close();
-                                    byteArrayOutputStream.write(tempBuffer, 0, cnt);
-                                    break;
-                                }
+                                voiceSegments++;
+//                                silenceSegment++;
+//                                //System.out.println(silenceSegment);
+//                                if (silenceSegment == silenceMax && voiceSegments>voiceMin) {
+//
+//                                    System.out.println("Koniec nagrania");
+//                                    //this will stop the recording
+//                                    targetDataLine.close();
+//                                    byteArrayOutputStream.write(tempBuffer, 0, cnt);
+//                                    break;
+//                                }
                                 byteArrayOutputStream.write(tempBuffer, 0, cnt);
-                            }
+                           // }
                         }
                     }
                 }
+                targetDataLine.close();
                 if(stopCapture){targetDataLine.close();return;}
                 byteArrayOutputStream.close();
                 streamData = byteArrayOutputStream.toByteArray();
-                streamData = Arrays.copyOf(streamData, streamData.length - silenceMax * 512);
+               // streamData = Arrays.copyOf(streamData, streamData.length - silenceMax * tempBuffer.length);
+                streamData = Arrays.copyOf(streamData, streamData.length);
 
 
                 switch(label){
@@ -355,7 +311,7 @@ public class WordRecognizer {
                 }
                 Case c=new Case();
                 ArrayList<Double> f=WordRecognizer.this.start();
-                for (int i = 0; i < featuresNumber; i++) {
+                for (int i = 0; i < f.size(); i++) {
                 c.addFeature(f.get(i));
                 }
 
@@ -363,8 +319,9 @@ public class WordRecognizer {
                 knn.addTestCase(c);
                 recognizedLabel=knn.run();
                 switch (recognizedLabel){
-                    case 1: System.out.println("TAK");break;
-                    case 2: System.out.println("NIE");break;
+                    case 1: jresult.setText("TAK");break;
+                    case 2: jresult.setText("NIE");break;
+                   
                 }
 
             } catch (Exception e) {
@@ -428,11 +385,11 @@ public class WordRecognizer {
     private void saveFeautures(ArrayList<Double> features, int label) {
         File file = new File(fileName);
         StringBuilder sb = new StringBuilder();
-        for(int i=0;i<featuresNumber-1;i++){
-            sb.append(features.get(i)+",");
+        for(int i=0;i<features.size()-1;i++){
+            sb.append(features.get(i).intValue()+",");
         }
 
-        sb.append(features.get(features.size()-1)+";"+label+"\n");
+        sb.append(features.get(features.size()-1).intValue()+";"+label+"\n");
 
         try {
             BufferedWriter output = new BufferedWriter(new FileWriter(file,true));
