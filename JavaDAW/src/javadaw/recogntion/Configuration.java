@@ -54,7 +54,7 @@ public class Configuration {
         /**
      * Wybrana metryka
      */
-    private static int metric=CZEBYSZEW;
+    private static int metric=EUCLIDES;
 
     /**
      * Ścieżka do pliku, w którym podczas ekstrakcji zostały zapisane dane
