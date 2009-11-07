@@ -533,8 +533,8 @@ public class JavaDAWView extends FrameView {
         this.jDAWEngine.deviceInfo.createSystem();
         this.jDAWEngine.deviceInfo.getDrivers();
         this.jDAWEngine.deviceInfo.getDevices();
-        //this.jDAWEngine.recordDeviceInfo.getDevices();
-        this.jDAWEngine.deviceInfo.init();
+        this.jDAWEngine.recordDeviceInfo.getDevices();
+        //this.jDAWEngine.deviceInfo.init();
         this.jDAWEngine.deviceInfo.init();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
