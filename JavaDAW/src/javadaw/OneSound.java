@@ -191,7 +191,8 @@ public class OneSound {
 
 
         int n = 0;
-        int wndSize = 44100 / 8;
+        int divider = 4;
+        int wndSize = 44100 / divider;
         int outResult = 0; int prevOutResult = 0;
         ArrayList<Integer> cutTimeList = new ArrayList<Integer>();
         ArrayList<Integer> frequencyList = new ArrayList<Integer>();
@@ -214,7 +215,7 @@ public class OneSound {
                 }
                 k++;
             }
-            outResult = founded * 8;
+            outResult = founded * divider;
             if (n == 0) {
                 prevOutResult = outResult;
                 cutTimeList.add(0);
@@ -234,7 +235,7 @@ public class OneSound {
                 }
             prevOutResult = outResult;
             tmpFrequencyList.add(prevOutResult);
-            n = n + 44100 / 8 / 2;
+            n = n + wndSize;
         }
         frequencyList.add(prevOutResult);
         jTextArea.append("Częstotliwość: " + prevOutResult/2 + " Hz. \r\n");
