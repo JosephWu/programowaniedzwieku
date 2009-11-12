@@ -37,7 +37,7 @@ public class WordRecognizer {
     public int[] values;
 
     private String fileName = "trening.txt";
-    private int treshold = 140;
+    private int treshold = 200;
     private JLabel jresult;
 
     //Nagrywanie
