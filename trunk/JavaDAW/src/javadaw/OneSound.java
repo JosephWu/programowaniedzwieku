@@ -227,7 +227,7 @@ public class OneSound {
                     for (int i = 0; i < tmpFrequencyList.size(); i++)
                         buff += tmpFrequencyList.get(i);
                     frequencyList.add(buff/tmpFrequencyList.size());
-                    jTextArea.append("Częstotliwość: " + buff/tmpFrequencyList.size() + " Hz. \r\n");
+                    jTextArea.append("Częstotliwość: " + buff/tmpFrequencyList.size()/2 + " Hz. \r\n");
                     cutTimeList.add(n);
                     jTextArea.append("Punkt wykrywania: " + n + " próbka. \r\n");
                     tmpFrequencyList.clear();
@@ -237,7 +237,7 @@ public class OneSound {
             n = n + 44100 / 8 / 2;
         }
         frequencyList.add(prevOutResult);
-        jTextArea.append("Częstotliwość: " + prevOutResult + " Hz. \r\n");
+        jTextArea.append("Częstotliwość: " + prevOutResult/2 + " Hz. \r\n");
         
         int pos = 0;
         cutTimeList.add(0);
