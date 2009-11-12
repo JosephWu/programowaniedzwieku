@@ -90,7 +90,7 @@ public class Knn {
                 superLabel = labelsAmounts[i];
             }
         }
-        return finalLabel;
+        return finalLabel+1;
     }
 
 

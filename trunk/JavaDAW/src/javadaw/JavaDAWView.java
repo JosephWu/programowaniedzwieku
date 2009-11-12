@@ -698,6 +698,7 @@ public class JavaDAWView extends FrameView {
         wr = new WordRecognizer();
         result.setText("............");
         wr.audioRecorderStart(0,result);
+        result.validate();
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
