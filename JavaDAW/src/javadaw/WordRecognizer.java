@@ -49,7 +49,7 @@ public class WordRecognizer {
     TargetDataLine targetDataLine;
     AudioInputStream audioInputStream;
     SourceDataLine sourceDataLine;
-    File file;
+    File file=new File("training.txt");
     String outputFileName;
 
     static int time = 2000;
