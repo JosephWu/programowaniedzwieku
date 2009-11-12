@@ -19,6 +19,7 @@ import org.jouvieje.FmodEx.Sound;
 import static org.jouvieje.FmodEx.Defines.FMOD_TIMEUNIT.*;
 
 import java.util.ArrayList;
+import javax.swing.JTextArea;
 
 
 /**
@@ -158,7 +159,7 @@ public class OneSound {
         return toRet;
     }
 
-    public int[] getCroseingsPlus(int offset, int length, int block) {
+    public int[] getCroseingsPlus(int offset, int length, int block, JTextArea jTextArea) {
         
         ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
         ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
@@ -217,16 +218,18 @@ public class OneSound {
             if (n == 0) {
                 prevOutResult = outResult;
                 cutTimeList.add(0);
-                frequencyList.add(prevOutResult);
+                jTextArea.append("Punkt wykrywania: " + n + " próbka. \r\n");
                 tmpFrequencyList.add(prevOutResult);
             }
             else
                 if (!(prevOutResult-100 < outResult && prevOutResult+100 > outResult)) {
-                    cutTimeList.add(n);
                     int buff = 0;
                     for (int i = 0; i < tmpFrequencyList.size(); i++)
                         buff += tmpFrequencyList.get(i);
                     frequencyList.add(buff/tmpFrequencyList.size());
+                    jTextArea.append("Częstotliwość: " + buff/tmpFrequencyList.size() + " Hz. \r\n");
+                    cutTimeList.add(n);
+                    jTextArea.append("Punkt wykrywania: " + n + " próbka. \r\n");
                     tmpFrequencyList.clear();
                 }
             prevOutResult = outResult;
@@ -234,10 +237,10 @@ public class OneSound {
             n = n + 44100 / 8 / 2;
         }
         frequencyList.add(prevOutResult);
-        cutTimeList.add(n);
-        cutTimeList.add(0);
+        jTextArea.append("Częstotliwość: " + prevOutResult + " Hz. \r\n");
         
         int pos = 0;
+        cutTimeList.add(0);
         for (int i = 0; i < toRet.length; i++) {
             if (cutTimeList.get(pos) == i)
                 pos++;
@@ -462,7 +465,7 @@ public class OneSound {
         SoundUtils.ErrorCheck(result);
 
         for (int i = 0; i < size/2; i++) {
-            bufferPtr1[0].put(intToByte((int)(32767.0*Math.sin(Math.PI*2.0*(double)i*(double)sampleRates[i]/2/44100.0))));
+            bufferPtr1[0].put(intToByte((int)(32765.0*Math.sin(Math.PI*2.0*(double)i*(double)sampleRates[i]/2/44100.0))));
         }
         bufferPtr1[0].rewind();
         this.result = this.sound.unlock(bufferPtr1[0], null,

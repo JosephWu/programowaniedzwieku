@@ -665,7 +665,7 @@ public class JavaDAWView extends FrameView {
             String s = (String) JOptionPane.showInputDialog(null,
                     "Wpisz wartość progową:\n",
                     "Próg", JOptionPane.INFORMATION_MESSAGE);
-            int[] tmp = this.oneSound.getCroseingsPlus(0, 256, Integer.parseInt(s));
+            int[] tmp = this.oneSound.getCroseingsPlus(0, 256, Integer.parseInt(s), this.getOutputTextArea());
             //for (int i = 0; i < tmp.length; i++) {
             //  this.outputTextArea.append("Częstotliwość podstawowa dźwięku: " +
             //        tmp[i] / 2 + " Hz.\n");
