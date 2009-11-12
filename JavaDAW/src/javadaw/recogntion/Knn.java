@@ -80,7 +80,7 @@ public class Knn {
         int[] labelsAmounts = new int[Configuration.getAvailableLabels()];
 
         for (int i = 0; i < Configuration.getNeighboursCount(); i++) {
-            labelsAmounts[this.distances.get(i).getLabel()]++;
+            labelsAmounts[this.distances.get(i).getLabel()-1]++;
         }
         int superLabel = labelsAmounts[0];
         int finalLabel = 0;
