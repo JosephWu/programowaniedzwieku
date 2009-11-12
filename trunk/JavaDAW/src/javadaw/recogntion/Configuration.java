@@ -1,4 +1,3 @@
-
 package javadaw.recogntion;
 
 import java.io.BufferedReader;
@@ -18,57 +17,46 @@ import java.util.regex.Pattern;
  */
 public class Configuration {
 
-
-
     /**
      * Ilość sąsiadów dla klasyfikacji KNN
      */
     private static int neighboursCount = 1;
     // a potem dla 8,7,5,3,2; narazie dla 10 najlepszy, dla 20 gorszy
-
     /**
      * Ilość możliwych etykiet, cyfr jest 10 więc 10
      */
     private static int availableLabels = 2;
-
     /**
      * Stała dla metryki euklidesowej
      */
     public static final int EUCLIDES = 1;
-
     /**
      * Stała dla metryki ulicznej
      */
     public static final int STREET = 2;
-
     /**
      * Stała dla metryki Czebyszewa
      */
     public static final int CZEBYSZEW = 3;
-
     /**
      * Stała dla metryki Minkowskiego
      */
     public static final int MINKOWSKI = 4;
-
-        /**
+    /**
      * Wybrana metryka
      */
-    private static int metric=EUCLIDES;
-
+    private static int metric = EUCLIDES;
     /**
      * Ścieżka do pliku, w którym podczas ekstrakcji zostały zapisane dane
      * z największymi wartościami dla poszczególnych cech. Jest wykorzystywana
      * jeśli normalizacja ustawiona jest na true
      */
     public static String maxValuesVectorFile = "data/maxValuesVector.txt";
-
     /**
      * Stała określająca czy włączona ma zostać normalizacja, dla naszego
      * zadania zawsze true, ze względu na dobre wyniki
      */
     public static boolean normalization = true;
-
     /**
      * Tablica z maksymalnymi wartościami dla poszczególnych cech,
      * wartości wpisywane są z pliku przygotowanego przez program ekstrkacji

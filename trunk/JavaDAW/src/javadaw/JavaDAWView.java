@@ -675,16 +675,13 @@ public class JavaDAWView extends FrameView {
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
-        OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
-        wr = new WordRecognizer(os);
-        
-
+        //OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
+        wr = new WordRecognizer();
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
-        OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
-        wr = new WordRecognizer(os);
-       
+        //OneSound os = new OneSound(jDAWEngine, "komenda.wav", false);
+        wr = new WordRecognizer();
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
@@ -698,13 +695,9 @@ public class JavaDAWView extends FrameView {
 }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        WordRecognizer wr = new WordRecognizer();
+        wr = new WordRecognizer();
         result.setText("............");
         wr.audioRecorderStart(0,result);
-
- 
-
-
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
