@@ -76,7 +76,21 @@ public class Knn {
     public int chooseBest(int testCaseNumber) {
         Collections.sort(this.distances);
         Collections.reverse(this.distances);
-        return this.distances.get(0).getLabel();
+
+        int[] labelsAmounts = new int[Configuration.getAvailableLabels()];
+
+        for (int i = 0; i < Configuration.getNeighboursCount(); i++) {
+            labelsAmounts[this.distances.get(i).getLabel()]++;
+        }
+        int superLabel = labelsAmounts[0];
+        int finalLabel = 0;
+        for (int i = 1; i < labelsAmounts.length; i++) {
+            if (labelsAmounts[i] > superLabel) {
+                finalLabel = i;
+                superLabel = labelsAmounts[i];
+            }
+        }
+        return finalLabel;
     }
 
 
