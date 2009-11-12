@@ -29,7 +29,7 @@ public class Configuration {
     /**
      * Ilość możliwych etykiet, cyfr jest 10 więc 10
      */
-    private static int availableLabels = 10;
+    private static int availableLabels = 2;
 
     /**
      * Stała dla metryki euklidesowej
