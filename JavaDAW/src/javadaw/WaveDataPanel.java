@@ -1,6 +1,7 @@
 
 package javadaw;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -28,6 +29,8 @@ public class WaveDataPanel extends JPanel {
         this.oneSound = oneSound;
         this.values = values;
         this.maxValue = 0;
+        
+
 
         width = 658;
         height = 300;
@@ -53,6 +56,7 @@ public class WaveDataPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+            super.paint(g);
       //  g2.drawImage(scaledImage, 0, 0, this);
             // Draw left channel
             double scale = 0.5 * height / 32768;
@@ -68,6 +72,7 @@ public class WaveDataPanel extends JPanel {
                 }
                 else
                 {
+                    g2.setColor(Color.GREEN);
                     g2.drawLine(xPrev, yPrev, x, y);
                     xPrev = x;
                     yPrev = y;
