@@ -47,6 +47,10 @@ public class OneSound {
 
     private ArrayList<Integer> indexes;
 
+    public OneSound() {
+        this.sound = new Sound();
+    }
+
     public OneSound(JDAWEngine jDAWEngine, String path, boolean streamed) {
         this.jDAWEngine = jDAWEngine;
         this.streamed = streamed;
