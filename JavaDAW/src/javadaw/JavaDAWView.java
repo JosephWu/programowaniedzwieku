@@ -163,6 +163,7 @@ public class JavaDAWView extends FrameView {
         jMenuItem16 = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
         javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
         statusMessageLabel = new javax.swing.JLabel();
@@ -526,6 +527,15 @@ public class JavaDAWView extends FrameView {
         aboutMenuItem.setName("aboutMenuItem"); // NOI18N
         helpMenu.add(aboutMenuItem);
 
+        jMenuItem11.setText(resourceMap.getString("jMenuItem11.text")); // NOI18N
+        jMenuItem11.setName("jMenuItem11"); // NOI18N
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        helpMenu.add(jMenuItem11);
+
         menuBar.add(helpMenu);
 
         statusPanel.setName("statusPanel"); // NOI18N
@@ -724,6 +734,11 @@ public class JavaDAWView extends FrameView {
         Configuration.setMetric(this.jComboBox1.getSelectedIndex()+1);
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        SoundRecorder sr = new SoundRecorder(jDAWEngine);
+        sr.init();
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -739,6 +754,7 @@ public class JavaDAWView extends FrameView {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
