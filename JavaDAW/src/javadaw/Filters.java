@@ -26,7 +26,7 @@ public class Filters {
         //Pierwsze dwa są te same
         y[0] = x[0];
         y[1] = x[1];
-        for (int i = 1; i < x.length; i++) {
+        for (int i = 2; i < x.length; i++) {
             y[i] = (int) (a0 * x[i] + a1 * x[i - 1] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
 
@@ -49,7 +49,7 @@ public class Filters {
         //Pierwsze dwa są te same
         y[0] = x[0];
         y[1] = x[1];
-        for (int i = 1; i < x.length; i++) {
+        for (int i = 2; i < x.length; i++) {
             y[i] = (int) (a0 * x[i] + a1 * x[i - 1] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
 
@@ -71,7 +71,7 @@ public class Filters {
         //Pierwsze dwa są te same
         y[0] = x[0];
         y[1] = x[1];
-        for (int i = 1; i < x.length; i++) {
+        for (int i = 2; i < x.length; i++) {
             y[i] = (int) (a0 * x[i] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
 
