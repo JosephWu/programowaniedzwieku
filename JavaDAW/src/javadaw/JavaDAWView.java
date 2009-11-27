@@ -736,7 +736,13 @@ public class JavaDAWView extends FrameView {
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         SoundRecorder sr = new SoundRecorder(jDAWEngine);
-        sr.init();
+        //sr.init();
+        SoundGenerator sg = new SoundGenerator();
+
+        WaveDataPanel wavDataPanel = new WaveDataPanel(sg.generateSound(2, 44100, 1, 10), null);
+        WaveDataFrame waveDataFrame = new WaveDataFrame(wavDataPanel);
+        waveDataFrame.setVisible(true);
+        waveDataFrame.validate();
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
