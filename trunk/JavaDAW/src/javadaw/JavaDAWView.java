@@ -739,7 +739,7 @@ public class JavaDAWView extends FrameView {
         //sr.init();
         SoundGenerator sg = new SoundGenerator();
 
-        WaveDataPanel wavDataPanel = new WaveDataPanel(sg.generateSound(2, 44100, 1, 10), null);
+        WaveDataPanel wavDataPanel = new WaveDataPanel(sg.generateSound(SoundGenerator.NOISE_WAVE, 44100, 1, 10), null);
         WaveDataFrame waveDataFrame = new WaveDataFrame(wavDataPanel);
         waveDataFrame.setVisible(true);
         waveDataFrame.validate();
