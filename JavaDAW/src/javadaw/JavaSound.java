@@ -10,8 +10,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 /**
- *
- * @author pioras
+ * Klasa reprezentuje dźwięk dla natywnego Java API do generowania dźwięków
+ * a potem do filtracji efektów itd. do wokodera też...
  */
 public class JavaSound {
 
@@ -24,13 +24,19 @@ public class JavaSound {
     public boolean bigEndian = true;
     public boolean isSigned = true;
 
+    /**
+     * Sygnał dźwięki w postaci tablicy bajtów (od -127 do 127)
+     */
     private byte[] soundData;
 
     public JavaSound() {
 
     }
 
-
+    /**
+     * Metoda inicjalizująca dźwięk. Jeśli tworzysz pusty dźwięk to wywołaj
+     * tą metodę od razu po utworzeniu obiektu tej klasy.
+     */
     public void createSound() {
         try {
             audioFormat = new AudioFormat(frequency, sampleSizeBits, numberOfChannels, isSigned, bigEndian);
@@ -41,7 +47,9 @@ public class JavaSound {
         }
     }
 
-
+    /**
+     * Metoda pozwala odtworzyć dźwięk.
+     */
     public void playSound() {
         try {
             line.open();
@@ -54,12 +62,21 @@ public class JavaSound {
         }
     }
 
+    /**
+     * Metoda pozwala zatrzymać dźwięk.
+     */
     public void stopSound() {
         line.stop();
         line.drain();
         line.close();
     }
 
+    /**
+     * Metoda zmienia sygnał dźwiękowy z postaci tablicy int na tablicę byte
+     * dla 16bit próbek.
+     *
+     * @param values sygnał dźwiękowy w postaci tablicy int od -32k do +32k
+     */
     private void intToBytes(int[] values) {
         this.soundData = new byte[values.length * (this.sampleSizeBits / 8)];
         for (int i = 0; i < values.length; i++) {
@@ -68,6 +85,13 @@ public class JavaSound {
         }
     }
 
+    /**
+     * Metoda pozwala załadować dane do pustego, utworzonego wcześniej dźwięku.
+     * Długość dźwięku teterminowana jets na podstawie długości podanej tablicy
+     * (jako argument metody)
+     *
+     * @param values sygnał do wstawienia w postaci tablicy int od -32k do +32k
+     */
     public void putIntData(int[] values) {
         this.intToBytes(values);
     }
