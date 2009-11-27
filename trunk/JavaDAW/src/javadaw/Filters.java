@@ -1,15 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package javadaw;
 
 /**
- *
- * @author Stach
+ * Klasa reprezentuje filtry górno, dolno i pasmowo przepustowe.
  */
 public class Filters {
 
+    /**
+     *
+     * @param x
+     * @param f
+     * @param q
+     * @return
+     */
     public int[] lowPassFillter(int[] x, double f, double q) {
         int[] y = new int[x.length];
         double s = Math.sin(Math.PI * 2 * f / 44100);
@@ -29,10 +32,17 @@ public class Filters {
         for (int i = 2; i < x.length; i++) {
             y[i] = (int) (a0 * x[i] + a1 * x[i - 1] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
-
         return y;
     }
 
+
+    /**
+     *
+     * @param x
+     * @param f
+     * @param q
+     * @return
+     */
     public int[] highPassFillter(int[] x, double f, double q) {
         int[] y = new int[x.length];
         double s = Math.sin(Math.PI * 2 * f / 44100);
@@ -52,10 +62,16 @@ public class Filters {
         for (int i = 2; i < x.length; i++) {
             y[i] = (int) (a0 * x[i] + a1 * x[i - 1] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
-
         return y;
     }
 
+    /**
+     *
+     * @param x
+     * @param f
+     * @param q
+     * @return
+     */
     public int[] passFillter(int[] x, double f, double q) {
         int[] y = new int[x.length];
         double s = Math.sin(Math.PI * 2 * f / 44100);
@@ -74,7 +90,6 @@ public class Filters {
         for (int i = 2; i < x.length; i++) {
             y[i] = (int) (a0 * x[i] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
-
         return y;
     }
 }
