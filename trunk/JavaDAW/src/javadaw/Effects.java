@@ -81,6 +81,10 @@ public class Effects {
     public void getVocoder() {
     }
 
+    /*
+     * lf czestetliwość dla LFO (Low Frequency)
+     * lf powinno byćmałe max 20
+     */
     public int[] wahwah(int[] x, int lf) {
 
         int f = 200;
