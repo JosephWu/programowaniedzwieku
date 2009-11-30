@@ -25,7 +25,7 @@ public class Ampli {
         double ratioMin = (double)min / -32767.0;
         double ratioMax = (double)max / 32767.0;
         double ratio = 0;
-        if (ratioMin > ratioMax)
+        if (ratioMin < ratioMax)
             ratio = ratioMin;
         else
             ratio = ratioMax;
