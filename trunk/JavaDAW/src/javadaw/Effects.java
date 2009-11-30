@@ -18,6 +18,15 @@ public class Effects {
         tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
                 (int) (44100 * 0.4), 392, 45);
         mixer.addSignal(tmp);
+        tmp = this.wahwah(sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 392, 45), 10);
+        mixer.addSignal(tmp);
+        tmp = this.wahwah(sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 392, 45), 10);
+        mixer.addSignal(tmp);
+        tmp = this.wahwah(sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 392, 45), 10);
+        mixer.addSignal(tmp);
         Ampli ampli = new Ampli();
 
         javaSound.putIntData(ampli.normalizeSingal(mixer.getOutput()));
@@ -31,18 +40,18 @@ public class Effects {
                 (int) (44100 * 0.4), 330, 45);
         mixer.addSignal(tmp);
         ampli = new Ampli();
-        javaSound.putIntData(ampli.normalizeSingal(tmp));
+        javaSound.putIntData(ampli.normalizeSingal(mixer.getOutput()));
         javaSound.playSound();
 
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
                 (int) (44100 * 0.4), 330, 25);
         mixer = new Mixer();
         mixer.putSignal(tmp);
-        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.4), 330, 45);
+        tmp = this.wahwah(sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 330, 45), 10);
         mixer.addSignal(tmp);
         ampli = new Ampli();
-        javaSound.putIntData(ampli.normalizeSingal(tmp));
+        javaSound.putIntData(ampli.normalizeSingal(mixer.getOutput()));
         javaSound.playSound();
 
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
@@ -52,8 +61,14 @@ public class Effects {
         tmp = sg.generateSound(SoundGenerator.SINUS_WAVE,
                 (int) (44100 * 0.4), 350, 45);
         mixer.addSignal(tmp);
+        tmp = this.wahwah(sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 392, 45), 10);
+        mixer.addSignal(tmp);
+        tmp = this.wahwah(sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 392, 45), 10);
+        mixer.addSignal(tmp);
         ampli = new Ampli();
-        javaSound.putIntData(ampli.normalizeSingal(tmp));
+        javaSound.putIntData(ampli.normalizeSingal(mixer.getOutput()));
         javaSound.playSound();
 
         javaSound.putIntData(sg.generateSound(SoundGenerator.SQUARE_WAVE,
@@ -72,8 +87,8 @@ public class Effects {
                 (int) (44100 * 0.2), 330, 25));
         javaSound.playSound();
 
-        javaSound.putIntData(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 392, 25));
+        javaSound.putIntData(this.wahwah(sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 392, 45), 2));
         javaSound.playSound();
 
     }

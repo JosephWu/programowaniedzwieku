@@ -22,7 +22,10 @@ public class Mixer {
      * @param values pierwszy sygnał podany do mixera w postaci tablicy int
      */
     public void putSignal(int[] values) {
-        signal = values;
+        signal = new int[values.length];
+        for (int i = 0; i < values.length; i++) {
+            signal[i] = values[i];
+        }
     }
 
     /**
