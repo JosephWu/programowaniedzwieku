@@ -81,7 +81,7 @@ public class Effects {
     public void getVocoder() {
     }
 
-    public static int[] wahwah(int[] x, int lf) {
+    public int[] wahwah(int[] x, int lf) {
 
         int f = 200;
         double q = 2;
