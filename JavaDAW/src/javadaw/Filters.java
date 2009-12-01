@@ -1,4 +1,3 @@
-
 package javadaw;
 
 /**
@@ -13,7 +12,7 @@ public class Filters {
      * @param q
      * @return
      */
-    public int[] lowPassFillter(int[] x, double f, double q) {
+    public static int[] lowPassFillter(int[] x, double f, double q) {
         int[] y = new int[x.length];
         double s = Math.sin(Math.PI * 2 * f / 44100);
         double c = Math.cos(Math.PI * 2 * f / 44100);
@@ -35,7 +34,6 @@ public class Filters {
         return y;
     }
 
-
     /**
      *
      * @param x
@@ -43,7 +41,7 @@ public class Filters {
      * @param q
      * @return
      */
-    public int[] highPassFillter(int[] x, double f, double q) {
+    public static int[] highPassFillter(int[] x, double f, double q) {
         int[] y = new int[x.length];
         double s = Math.sin(Math.PI * 2 * f / 44100);
         double c = Math.cos(Math.PI * 2 * f / 44100);
@@ -72,7 +70,7 @@ public class Filters {
      * @param q
      * @return
      */
-    public int[] passFillter(int[] x, double f, double q) {
+    public static int[] passFillter(int[] x, double f, double q) {
         int[] y = new int[x.length];
         double s = Math.sin(Math.PI * 2 * f / 44100);
         double c = Math.cos(Math.PI * 2 * f / 44100);
