@@ -10,12 +10,14 @@ package javadaw;
  */
 public class Vocoder {
 
-    double q = 1.5;//rezonans (do filtrów)
+    double q = 1;//rezonans (do filtrów)
     //Krańce pasma w którym działa vocoder
-    int lowPassFreq = 400;
-    int highPassFreq = 4000;
-    int passes = 15;//liczba rozpatrywanych pasm
+    int lowPassFreq = 500;
+    int highPassFreq = 3500;
+    int passes = 10;//liczba rozpatrywanych pasm
     OneSound oneSound;
+    int[] voice;
+    int[] sound;
 
     /*
      * Funkcja zwaraca obwiednię sygnału
@@ -77,15 +79,15 @@ public class Vocoder {
     }
 
     public int[] bandPassFilter(int[] x, int lowFreq, int highFreq) {
-        int[] y = Filters.lowPassFillter(x, lowFreq, q);
-        y = Filters.highPassFillter(y, highFreq, q);
+        int[] y = Filters.lowPassFillter(x, highFreq, q);
+        y = Filters.highPassFillter(y, lowFreq, q);
         return y;
     }
 
     public int[] join(int[] sound, int[] envelopeTop, int[] envelopeBottom) {
         int[] s = new int[sound.length];
 
-        for (int i = 0; i < sound.length; i++) {
+        for (int i = 0; i < voice.length; i++) {
             if (sound[i] > envelopeTop[i]) {
                 s[i] = envelopeTop[i];
                 continue;
@@ -105,7 +107,7 @@ public class Vocoder {
      *
      * Na razie sound (nowy dźwięk nosnej powinien byćtej samej długości co voice)
      */
-    public int[] vocoder(int[] voice, int[] sound) {
+    public int[] vocoder() {
         Mixer mixer = new Mixer();
         //Teraz filtrujemy pokolej sygnał filtrami pasmo przepustowymi
         for (int i = 0; i < passes; i++) {
@@ -125,8 +127,18 @@ public class Vocoder {
                 mixer.addSignal(s);
             }
         }
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
 
         return mixer.getOutput();
     }
+
+    public void setSound(int[] sound) {
+        this.sound = sound;
+        
+    }
+
+    public void setVoice(int[] voice) {
+        this.voice = voice;
+    }
+
+
 }
