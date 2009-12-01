@@ -6,6 +6,61 @@ package javadaw;
  */
 public class Effects {
 
+    public void getOneSimpleEffect(int freqency, int k, boolean[] on,
+            boolean wahwah, int wahwahParam) {
+        SoundGenerator sg = new SoundGenerator();
+        JavaSound javaSound = new JavaSound();
+        javaSound.createSound();
+        int[] tmp = {0};
+        Mixer mixer = new Mixer();
+
+        if (on[0]) {
+            tmp = sg.generateSound(SoundGenerator.SINUS_WAVE,
+                (int) (44100 * 2.0), freqency, k);
+            on[0] = false;
+        }
+        else if(on[1]) {
+            tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
+                (int) (44100 * 2.0), freqency, k);
+            on[1] = false;
+        }
+        else if(on[2]) {
+            tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 2.0), freqency, k);
+            on[2] = false;
+        }
+        else if(on[3]) {
+            tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 2.0), freqency, k);
+            on[3] = false;
+        }
+        mixer.putSignal(tmp);
+
+
+        if(on[1]) {
+            tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
+                (int) (44100 * 2.0), freqency, k);
+        }
+        if(on[2]) {
+            tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 2.0), freqency, k);
+        }
+        if(on[3]) {
+            tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 2.0), freqency, k);
+        }
+        mixer.addSignal(tmp);
+
+        if (wahwah) {
+            tmp = this.wahwah(tmp, wahwahParam);
+        }
+        mixer.addSignal(tmp);
+
+        Ampli ampli = new Ampli();
+        javaSound.putIntData(ampli.normalizeSingal(mixer.getOutput()));
+        javaSound.playSound();
+    }
+
     public void getSimpleEffect() {
         SoundGenerator sg = new SoundGenerator();
         JavaSound javaSound = new JavaSound();
