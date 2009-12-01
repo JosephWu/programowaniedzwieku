@@ -64,7 +64,7 @@ public class WaveDataPanel extends JPanel {
             double center = height / 2;
             for (int x = 0; x < width; x++)
             {
-                int y = (int)(center + (values[values.length / width * x] * scale));
+                int y = (int)(center - (values[values.length / width * x] * scale));
                 if (x == 0)
                 {
                     xPrev = 0;
