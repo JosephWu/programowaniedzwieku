@@ -13,7 +13,7 @@ public class Vocoder {
     /*
      * Funkcja zwaraca obwiednię sygnału
      */
-    public int[] getEnvelope(int[] x) {
+    public static int[] getEnvelope(int[] x) {
         int[] envelope = new int[x.length];
 
 
@@ -23,7 +23,7 @@ public class Vocoder {
         envelope[0] = x[0];
         for (int i = 1; i < x.length - 1; i++) {
             //szukamy maximum
-            if (x[i] > x[i - 1] && x[i] > x[i + 1]) {
+            if (x[i] >= x[i - 1] && x[i] >= x[i + 1] && x[i]>0) {
                 envelope[i] = x[i];
                 e = i;
                 //uzupełnienie wartości od p do e
@@ -35,10 +35,9 @@ public class Vocoder {
         }
         //Teraz możliwe że fragment od ostatniego maksimum do kończa nie jest wypełniony
         //trzeba to naprawić
-        for (int k = 1; k <= x.length - e; k++) {
+        for (int k = 1; k < x.length - e; k++) {
             envelope[e + k] = x[e] + k * (x[x.length - 1] - x[e]) / (x.length - e);
         }
-
         return envelope;
     }
 }
