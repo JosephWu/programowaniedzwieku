@@ -570,4 +570,32 @@ public class OneSound {
         return values;
     }
 
+    public int[] getRawBytes() {
+        ByteBuffer[] bufferPtr1 = new ByteBuffer[1];
+        ByteBuffer[] bufferPtr2 = new ByteBuffer[1];
+        IntBuffer bufferLen1 = BufferUtils.newIntBuffer(256);
+        IntBuffer bufferLen2 = BufferUtils.newIntBuffer(256);
+
+        IntBuffer intBuffer = BufferUtils.newIntBuffer(256);
+        this.result = this.sound.getLength(intBuffer, FMOD_TIMEUNIT_PCMBYTES);
+        SoundUtils.ErrorCheck(result);
+
+        int size = intBuffer.get(0);
+        this.result = this.sound.lock(0, size, bufferPtr1, bufferPtr2,
+                bufferLen1, bufferLen2);
+        SoundUtils.ErrorCheck(result);
+
+        int[] signal = new int[size/2];
+        byte[] dst = new byte[2];
+        int j = 0;
+        while (true) {
+            if (j == size/2)
+                break;
+            bufferPtr1[0].get(dst);
+            signal[j] = unsignedByteToInt(dst);
+            j++;
+        }
+        return signal;
+    }
+
 }
