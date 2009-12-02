@@ -7,9 +7,9 @@ public class Filters {
 
     /**
      *
-     * @param x
-     * @param f
-     * @param q
+     * @param x sygnał
+     * @param f częstotliwość odcięcia
+     * @param q współczynnik rezonansu
      * @return
      */
     public static int[] lowPassFillter(int[] x, double f, double q) {
@@ -36,9 +36,9 @@ public class Filters {
 
     /**
      *
-     * @param x
-     * @param f
-     * @param q
+     * @param x sygnał
+     * @param f częstotliwość odcięcia
+     * @param q współczynnik rezonansu
      * @return
      */
     public static int[] highPassFillter(int[] x, double f, double q) {
@@ -65,9 +65,9 @@ public class Filters {
 
     /**
      *
-     * @param x
-     * @param f
-     * @param q
+     * @param x sygnał
+     * @param f częstotliwość odcięcia
+     * @param q współczynnik rezonansu
      * @return
      */
     public static int[] passFillter(int[] x, double f, double q) {
