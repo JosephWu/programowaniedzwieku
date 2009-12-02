@@ -61,6 +61,43 @@ public class Effects {
         javaSound.playSound();
     }
 
+    public void getHelicopter() {
+        SoundGenerator sg = new SoundGenerator();
+        JavaSound javaSound = new JavaSound();
+        javaSound.createSound();
+        int[] tmp = {0};
+        Mixer mixer1 = new Mixer();
+        Mixer mixer2 = new Mixer();
+        Mixer mixer = new Mixer();
+
+        int[] noise = sg.generateSound(SoundGenerator.NOISE_WAVE,
+                (int) (44100 * 2.0), 5000, 0);
+        tmp = Filters.lowPassFillter(noise, 800, 2.0);
+        tmp = sg.delaySoundCos(tmp);
+        mixer.putSignal(tmp);
+
+        tmp = sg.generateSound(SoundGenerator.NOISE_WAVE,
+                (int) (44100 * 2.0), 5000, 0);
+        tmp = Filters.lowPassFillter(noise, 800, 2.0);
+        tmp = sg.delaySoundSin(tmp);
+        mixer.addSignal(tmp);
+
+        //tmp = sg.generateSound(SoundGenerator.SINUS_WAVE,
+          //      (int) (44100 * 2.0), 100, 0);
+        //mixer1.addSignal(tmp);
+
+        //tmp = sg.generateSound(SoundGenerator.COSSINUS_WAVE,
+         //       (int) (44100 * 2.0), 100, 0);
+        //tmp = sg.delaySound(tmp, 50);
+        //mixer2.addSignal(tmp);
+
+        //mixer.putSignal(mixer1.getOutput());
+        //mixer.addSignal(mixer2.getOutput());
+        Ampli ampli = new Ampli();
+        javaSound.putIntData(ampli.normalizeSingal(mixer.getOutput()));
+        javaSound.playSound();
+    }
+
     public void getSimpleEffect() {
         SoundGenerator sg = new SoundGenerator();
         JavaSound javaSound = new JavaSound();
