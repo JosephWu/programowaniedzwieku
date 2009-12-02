@@ -956,6 +956,13 @@ public class JavaDAWView extends FrameView {
         this.oneSound = new OneSound(jDAWEngine, soundFileChooserGUI.getPath(),
                 this.jCheckBoxMenuItemStreamed.getState());
         int[] signal = this.oneSound.getRawBytes();
+        int[] source = new OneSound(jDAWEngine, "vocoder/sound1.wav",
+                this.jCheckBoxMenuItemStreamed.getState()).getRawBytes();
+        Vocoder vocoder = new Vocoder(signal, source);
+        JavaSound javaSound = new JavaSound();
+        javaSound.createSound();
+        javaSound.putIntData(vocoder.getVocodedSignal());
+        javaSound.playSound();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
