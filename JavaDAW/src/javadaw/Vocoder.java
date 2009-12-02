@@ -7,28 +7,89 @@ package javadaw;
 import java.util.Arrays;
 
 /**
+ * Ale człowieku w tej klasie to jest bałagan kosmiczny :DDDDDDDDDDDDDDD
+ * Ja sie pytam po co są konstruktory? A no po to, zebym ja mogl jak czlowiek
+ * utworzyć nowy obiekt i zlukać sobie co tu sie dzieje, a tak zaraz sam dopisze
+ * domyslając sie. Poza tym znowu nie dziala Twoj super klient svn
+ * bo zapewne nie wcommitowales interfejsu - trudno, ja docommitowalem to co zrobilem
+ * Czyli wykonalismy dwa razy ta sama robote.... ja pitole :))))))))))))))))))
  *
  * @author Stach
  */
 public class Vocoder {
 
-    double q = 1;//rezonans (do filtrów)
-    //Krańce pasma w którym działa vocoder
-    int lowPassFreq = 20;
-    int highPassFreq = 10000;
-    int passes = 32;//liczba rozpatrywanych pasm
+    /**
+     * Wartość reoznansu - do filtrów
+     *
+     * !!! Komentarz do zmiennych również fajnie robić w tym szybkim komentowaniu
+     * czyli / i dwie gwiazdki i enter, natomiast double zapisywac 1.0
+     * zamiast 1, poniewaz jest to niemylące, podkreslające tego doubla,
+     * ułatwia prace
+     */
+    private double q = 1.0;
+
+    /**
+     * Dolne krańcowe pasmo, w którym działa wokoder
+     */
+    private int lowPassFreq = 20;
+
+    /**
+     * Górne krańcowe pasmo, w którym działa wokoder
+     */
+    private int highPassFreq = 10000;
+
+    /**
+     * liczba rozpatrywanych pasm
+     */
+    private int passes = 32;
+
+    /**
+     * Dzwiek oneSound - w ogóle tu niepotrzebny, nie dobierajmy się do silnika,
+     * tu robimy operacje matematyczne tylko czyli tablice intów
+     */
     OneSound oneSound;
+
+    /**
+     * Wokal do nałożenia efektu wokodera, tablica int -32k do 32k
+     */
     int[] voice;
+
+    /**
+     * Nośna do wokodera, tablica int -32k do 32k
+     */
     int[] sound;
+
+    /**
+     * Konstruktor klasy, w nim ustawiamy tablice int -32k do 32k z sygnałem
+     * PCM, Pierwszy argument to wokal do zwokodowania a drugi to nośna.
+     *
+     * @param voice wokal
+     * @param sound nośna
+     */
+    public Vocoder(int[] voice, int[] sound) {
+        this.sound = sound;
+        this.voice = voice;
+    }
+
+    /**
+     * Wywołaj to po utworzeniu obiektu klasy w celu pobrania przetworzonego
+     * sygnału.
+     *
+     * @return wokal po wokoderze
+     */
+    public int[] getVocodedSignal() {
+        return this.vocoder();
+    }
+
+
 
     /*
      * Funkcja zwaraca obwiednię sygnału
      */
     public static int[] getEnvelope(int[] x) {
         int[] envelope = new int[x.length];
-
-
         //p i e są indeksami i opisują obsza między maksimami
+        // Czemu P i E? może start? end?
         int p = 0;//poczatek
         int e = 0;//koniec
         envelope[0] = x[0];
@@ -53,21 +114,36 @@ public class Vocoder {
     }
 
 
-
+    /**
+     *
+     * @param x
+     * @param lowFreq
+     * @param highFreq
+     * @return
+     */
     public int[] bandPassFilter(int[] x, int lowFreq, int highFreq) {
         int[] y = Filters.lowPassFillter(x, highFreq, q);
         y = Filters.highPassFillter(y, lowFreq, q);
         return y;
     }
 
+
+    /**
+     * Uzupełnij komentarz ok? I używaj skrótu do formatowania kodu, bo się
+     * tym chwaliłeś i nadal nie używasz, chociaż jest lepiej :)... tak wiem
+     * kod pisany na szybko i w ogóle, ale trace czas, który mógłbym
+     * poświęcić na BRACHISTOCOŚTAM
+     *
+     * @param sound
+     * @param envelope
+     * @return
+     */
     public int[] join(int[] sound, int[] envelope) {
         int[] s = new int[sound.length];
-
         for (int i = 0; i < voice.length; i++) {
             
             s[i] = (int) (sound[i] * envelope[i] / 32767.0);
         }
-
         return s;
     }
 
@@ -80,8 +156,11 @@ public class Vocoder {
         Mixer mixer = new Mixer();
         //Teraz filtrujemy pokolej sygnał filtrami pasmo przepustowymi
         for (int i = 0; i < passes; i++) {
-            int[] v = bandPassFilter(voice, lowPassFreq + i * (highPassFreq - lowPassFreq) / passes, lowPassFreq + (i + 1) * (highPassFreq - lowPassFreq) / passes);
+            int lowFrequ = lowPassFreq + i * (highPassFreq - lowPassFreq) / passes;
+            int highFreq = lowPassFreq + (i + 1) * (highPassFreq - lowPassFreq) / passes;
+            int[] v = bandPassFilter(voice, lowFrequ, highFreq);
 
+            // CO TO JEST TA PĘTLA?
             //testPlay(v);
             //Obliczamy obwiednię głosu (w danym paśmie)
             int[] envelope = getEnvelope(v);
@@ -108,15 +187,29 @@ public class Vocoder {
         return mixer.getOutput();
     }
 
+    /**
+     *
+     * @param sound
+     */
     public void setSound(int[] sound) {
         this.sound = sound;
-
     }
 
+    /**
+     *
+     * @param voice
+     */
     public void setVoice(int[] voice) {
         this.voice = voice;
     }
 
+    /**
+     *
+     * @param x
+     * @param lowFreq
+     * @param highFreq
+     * @return
+     */
     public int[] bandPassFilterFFT(int[] x, int lowFreq, int highFreq) {
         int blockSize = 512;
         Complex[] s = new Complex[x.length];
@@ -158,6 +251,14 @@ public class Vocoder {
         return y;
     }
 
+    
+    /**
+     * Funkcja tylko testująca wewnątrz programu - domyśliłem się ;)
+     * Rób komentarze do nietypowych rzeczy a najlepiej do wszystkich, jeśli
+     * robimy razem.
+     *
+     * @param sound
+     */
     private void testPlay(int[] sound) {
         JavaSound javaSound = new JavaSound();
         javaSound.createSound();
