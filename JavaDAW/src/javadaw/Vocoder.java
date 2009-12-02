@@ -15,17 +15,14 @@ public class Vocoder {
      * Wartość reoznansu - do filtrów
      */
     private double q = 1.0;
-
     /**
      * liczba rozpatrywanych pasm
      */
     private int passes = 32;
-
     /**
      * Wokal do nałożenia efektu wokodera, tablica int -32k do 32k
      */
     int[] voice;
-
     /**
      * Nośna do wokodera, tablica int -32k do 32k
      */
@@ -53,8 +50,6 @@ public class Vocoder {
         return this.vocoder();
     }
 
-
-
     /*
      * Funkcja zwaraca obwiednię sygnału
      */
@@ -69,11 +64,11 @@ public class Vocoder {
             if (x[i] >= x[i - 1] && x[i] >= x[i + 1] && x[i] > 0) {
                 end = i;
                 envelope[end] = x[end];
-                double divider = (double)(x[end] - x[start]) / (double)(end - start);
+                double divider = (double) (x[end] - x[start]) / (double) (end - start);
                 //uzupełnienie wartości od start do end
                 for (int k = 0; k < end - start; k++) {
                     int xPosition = start + k;
-                    envelope[xPosition] = (int)(divider*(xPosition-start) + x[start]);
+                    envelope[xPosition] = (int) (divider * (xPosition - start) + x[start]);
                 }
                 start = end;
             }
@@ -85,7 +80,6 @@ public class Vocoder {
         }
         return envelope;
     }
-
 
     /**
      * Funkcja realizuje połączenie filtr pasmoprzepustowy jako
@@ -101,7 +95,6 @@ public class Vocoder {
         return y;
     }
 
-
     /**
      * "Nałożenie" obwiedni głosu na sygnał nośnej
      * @param sound - sygnał nowej nosnej
@@ -109,14 +102,14 @@ public class Vocoder {
      * @return
      */
     public int[] join(int[] sound, int[] envelope) {
-        int[] output = new int[sound.length];
+        int[] output = new int[envelope.length];
         int k = 0;
         for (int i = 0; i < voice.length; i++) {
-            if (k >= sound.length)
+            if (k >= sound.length) {
                 k = 0;
-
+            }
             //To chyba nie jest za dobre podejście na połączenie obwiedni z sygnałem
-            output[i] = (int) (sound[k++] * (double)envelope[i] / 32767.0);
+            output[i] = (int) ((sound[k++] * envelope[i]) / 32767.0);
         }
         return output;
     }
@@ -129,14 +122,14 @@ public class Vocoder {
         //Teraz filtrujemy pokolej sygnał filtrami pasmo przepustowymi
         int[] lowFrequTable = {25, 50, 100, 200, 400, 800, 1600, 3200, 6400, 12800};
         int[] highFrequTable = {50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600};
-        passes = 10;
+        passes = 8;
 
         for (int i = 0; i < passes; i++) {
             int lowFrequ = lowFrequTable[i];
             int highFreq = highFrequTable[i];
             int[] v = bandPassFilter(voice, lowFrequ, highFreq);
 
- 
+
             //testPlay(v);
             //Obliczamy obwiednię głosu (w danym paśmie)
 
@@ -146,19 +139,20 @@ public class Vocoder {
             //Obliczenia w pętli mają na celu "wygładzenie" obwiedni
             //(ilość iteracji powinna zostać dobrana eksperymentalnie)
 
-            for (int k = 0; k < 10; k++) {
+            for (int k = 0; k < 0; k++) {
                 envelope = getEnvelope(envelope);
             }
 
-            //filtrujemy nową nośną
-            int[] s = bandPassFilter(sound, lowFrequ, highFreq);
+            //Generacja nośnej (w tym wypadku piły)
+            int[] s = new SoundGenerator().generateSound(
+                    SoundGenerator.SQUARE_WAVE, v.length, 500, 20);
 
             // envelope powstał z wokalu, więc on jest dla nas wyznacznikiem,
             // a s albo musi byc odpowiednio dlugie, albo zostac powielone
-            int[] outputVocoded = join(s, envelope);
-            //testPlay(s);
+            s = bandPassFilter(s, lowFrequ, highFreq);
 
- 
+            int[] outputVocoded = join(s, envelope);
+
             //synteza nowych sygnałów
             if (i == 0) {
                 mixer.putSignal(outputVocoded);
@@ -235,7 +229,6 @@ public class Vocoder {
         return y;
     }
 
-    
     /**
      * Funkcja pozwalająca na odsłuch analizowanych fragmentów, w celu
      * dokonania obiektywnej oceny działania programu przez urzytkownika.
