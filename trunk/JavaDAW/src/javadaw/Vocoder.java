@@ -67,11 +67,13 @@ public class Vocoder {
         for (int i = 1; i < x.length - 1; i++) {
             //szukamy maximum
             if (x[i] >= x[i - 1] && x[i] >= x[i + 1] && x[i] > 0) {
-                envelope[i] = x[i];
                 end = i;
+                envelope[end] = x[end];
+                double divider = (double)(x[end] - x[start]) / (double)(end - start);
                 //uzupełnienie wartości od start do end
-                for (int k = 1; k <= end - start; k++) {
-                    envelope[start + k] = x[start] + k * (x[end] - x[start]) / (end - start);
+                for (int k = 0; k < end - start; k++) {
+                    int xPosition = start + k;
+                    envelope[xPosition] = (int)(divider*(xPosition-start) + x[start]);
                 }
                 start = end;
             }
@@ -114,7 +116,7 @@ public class Vocoder {
                 k = 0;
 
             //To chyba nie jest za dobre podejście na połączenie obwiedni z sygnałem
-            output[i] = (int) (sound[k++] * envelope[i] / 32767.0);
+            output[i] = (int) (sound[k++] * (double)envelope[i] / 32767.0);
         }
         return output;
     }
@@ -144,7 +146,7 @@ public class Vocoder {
             //Obliczenia w pętli mają na celu "wygładzenie" obwiedni
             //(ilość iteracji powinna zostać dobrana eksperymentalnie)
 
-            for (int k = 0; k < 1; k++) {
+            for (int k = 0; k < 10; k++) {
                 envelope = getEnvelope(envelope);
             }
 
