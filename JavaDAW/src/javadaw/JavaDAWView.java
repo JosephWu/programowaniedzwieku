@@ -903,7 +903,7 @@ public class JavaDAWView extends FrameView {
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-        SoundRecorder sr = new SoundRecorder(jDAWEngine);
+      /**  SoundRecorder sr = new SoundRecorder(jDAWEngine);
         //sr.init();
         SoundGenerator sg = new SoundGenerator();
 
@@ -924,7 +924,9 @@ public class JavaDAWView extends FrameView {
 
         WaveDataFrame waveDataFrame = new WaveDataFrame(wavDataPanel);
         waveDataFrame.setVisible(true);
-        waveDataFrame.validate();
+        waveDataFrame.validate();**/
+        Effects effects = new Effects();
+        effects.getHelicopter();
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed

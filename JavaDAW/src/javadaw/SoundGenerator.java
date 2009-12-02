@@ -13,6 +13,7 @@ public class SoundGenerator {
     public static final int SAWTOOTH_WAVE = 3;
     public static final int TRIANGLE_WAVE = 4;
     public static final int NOISE_WAVE = 5;
+    public static final int COSSINUS_WAVE = 6;
 
     public SoundGenerator() {
     }
@@ -30,6 +31,9 @@ public class SoundGenerator {
             double tmp = 0;
             switch (type) {
                 case SoundGenerator.SINUS_WAVE:
+                    tmp = (Math.sin(2.0*Math.PI*(double)t*(double)frequency/44100.0));
+                    break;
+                case SoundGenerator.COSSINUS_WAVE:
                     tmp = (Math.sin(2.0*Math.PI*(double)t*(double)frequency/44100.0));
                     break;
                 case SoundGenerator.SQUARE_WAVE:
@@ -62,5 +66,47 @@ public class SoundGenerator {
                 val[t] = (int) (tmpVals[t] / max * 32767.0);
             }
         return val;
+    }
+
+    public int[] delaySound(int[] sound, int delaySample) {
+        int[] toRet = new int[sound.length];
+        int k = 0;
+        for (int t = 0; t < toRet.length; t++) {
+            if(k+delaySample >= toRet.length) {
+                k = -delaySample;
+                k = 0;
+            }
+            toRet[t] = sound[k+delaySample];
+            k++;
+        }
+        return toRet;
+    }
+
+    public int[] delaySoundSin(int[] sound) {
+        int[] toRet = new int[sound.length];
+        int[] delays = new int[sound.length];
+        SoundGenerator sg = new SoundGenerator();
+        delays = sg.generateSound(SINUS_WAVE, 44100*2, 600, 0);
+        for (int t = 40; t < toRet.length-40; t++) {
+            if (delays[t] > 0)
+                toRet[t] = sound[t+40];
+            else toRet[t] = sound[t-40];
+        }
+
+        return toRet;
+    }
+
+    public int[] delaySoundCos(int[] sound) {
+        int[] toRet = new int[sound.length];
+        int[] delays = new int[sound.length];
+        SoundGenerator sg = new SoundGenerator();
+        delays = sg.generateSound(COSSINUS_WAVE, 44100*2, 600, 0);
+        for (int t = 40; t < toRet.length-40; t++) {
+            if (delays[t] > 0)
+                toRet[t] = sound[t+40];
+            else toRet[t] = sound[t-40];
+        }
+
+        return toRet;
     }
 }

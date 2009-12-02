@@ -14,16 +14,16 @@ public class Filters {
      */
     public static int[] lowPassFillter(int[] x, double f, double q) {
         int[] y = new int[x.length];
-        double s = Math.sin(Math.PI * 2 * f / 44100);
-        double c = Math.cos(Math.PI * 2 * f / 44100);
-        double alfa = s / (2 * q);
-        double r = 1 / (1 + alfa);
+        double s = Math.sin(Math.PI * 2.0 * f / 44100.0);
+        double c = Math.cos(Math.PI * 2.0 * f / 44100.0);
+        double alfa = s / (2.0 * q);
+        double r = 1.0 / (1.0 + alfa);
 
-        double a0 = 0.5 * (1 - c) * r;
-        double a1 = (1 - c) * r;
+        double a0 = 0.5 * (1.0 - c) * r;
+        double a1 = (1.0 - c) * r;
         double a2 = a0;
-        double b1 = -2 * c * r;
-        double b2 = (1 - alfa) * r;
+        double b1 = -2.0 * c * r;
+        double b2 = (1.0 - alfa) * r;
 
         //Pierwsze dwa są te same
         y[0] = x[0];
