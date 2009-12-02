@@ -157,20 +157,20 @@ public class Vocoder {
     public int[] vocoder() {
         Mixer mixer = new Mixer();
         //Teraz filtrujemy pokolej sygnał filtrami pasmo przepustowymi
-        int[] lowFrequTable = {25, 100, 200, 400, 800, 1600, 3200, 6400, 12800};
-        int[] highFrequTable = {50, 200, 400, 800, 1600, 3200, 6400, 12800, 25600};
-        passes = 9;
+        int[] lowFrequTable = {25, 50, 100, 200, 400, 800, 1600, 3200, 6400, 12800};
+        int[] highFrequTable = {50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600};
+        passes = 10;
 
         for (int i = 0; i < passes; i++) {
-            int lowFrequ = lowPassFreq + i * (highPassFreq - lowPassFreq) / passes;
-            int highFreq = lowPassFreq + (i + 1) * (highPassFreq - lowPassFreq) / passes;
+            int lowFrequ = lowFrequTable[i];
+            int highFreq = highFrequTable[i];
             int[] v = bandPassFilter(voice, lowFrequ, highFreq);
 
             // CO TO JEST TA PĘTLA?
             //testPlay(v);
             //Obliczamy obwiednię głosu (w danym paśmie)
             int[] envelope = getEnvelope(v);
-            for (int k = 0; k < 10; k++) {
+            for (int k = 0; k < 1; k++) {
                 envelope = getEnvelope(envelope);
             }
 
