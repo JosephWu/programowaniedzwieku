@@ -203,15 +203,15 @@ public class Vocoder {
             Complex[] tmp = Arrays.copyOfRange(s, i * 512, (i + 1) * 512);
             tmp = new DFT().fft(tmp);
             //teraz wycięcie odpowiedniego pasma
-            int l = lowFreq / resolution;
-            int r = highFreq / resolution;
+            int lowFreqThreshold = lowFreq / resolution;
+            int highFreqThreshold = highFreq / resolution;
 
             //wycinanie pasma
-            for (int k = 0; k < l; k++) {
+            for (int k = 0; k < lowFreqThreshold; k++) {
                 tmp[k] = new Complex(0, 0);
                 tmp[tmp.length - k - 1] = new Complex(0, 0);
             }
-            for (int k = r; k < tmp.length / 2; k++) {
+            for (int k = highFreqThreshold; k < tmp.length / 2; k++) {
                 tmp[k] = new Complex(0, 0);
                 tmp[k + blockSize / 2 - 1] = new Complex(0, 0);
             }
