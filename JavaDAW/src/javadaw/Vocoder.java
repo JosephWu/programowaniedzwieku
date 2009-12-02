@@ -7,47 +7,19 @@ package javadaw;
 import java.util.Arrays;
 
 /**
- * Ale człowieku w tej klasie to jest bałagan kosmiczny :DDDDDDDDDDDDDDD
- * Ja sie pytam po co są konstruktory? A no po to, zebym ja mogl jak czlowiek
- * utworzyć nowy obiekt i zlukać sobie co tu sie dzieje, a tak zaraz sam dopisze
- * domyslając sie. Poza tym znowu nie dziala Twoj super klient svn
- * bo zapewne nie wcommitowales interfejsu - trudno, ja docommitowalem to co zrobilem
- * Czyli wykonalismy dwa razy ta sama robote.... ja pitole :))))))))))))))))))
- *
  * @author Stach
  */
 public class Vocoder {
 
     /**
      * Wartość reoznansu - do filtrów
-     *
-     * !!! Komentarz do zmiennych również fajnie robić w tym szybkim komentowaniu
-     * czyli / i dwie gwiazdki i enter, natomiast double zapisywac 1.0
-     * zamiast 1, poniewaz jest to niemylące, podkreslające tego doubla,
-     * ułatwia prace
      */
     private double q = 1.0;
-
-    /**
-     * Dolne krańcowe pasmo, w którym działa wokoder
-     */
-    private int lowPassFreq = 20;
-
-    /**
-     * Górne krańcowe pasmo, w którym działa wokoder
-     */
-    private int highPassFreq = 10000;
 
     /**
      * liczba rozpatrywanych pasm
      */
     private int passes = 32;
-
-    /**
-     * Dzwiek oneSound - w ogóle tu niepotrzebny, nie dobierajmy się do silnika,
-     * tu robimy operacje matematyczne tylko czyli tablice intów
-     */
-    OneSound oneSound;
 
     /**
      * Wokal do nałożenia efektu wokodera, tablica int -32k do 32k
@@ -88,35 +60,35 @@ public class Vocoder {
      */
     public static int[] getEnvelope(int[] x) {
         int[] envelope = new int[x.length];
-        //p i e są indeksami i opisują obsza między maksimami
-        // Czemu P i E? może start? end?
-        int p = 0;//poczatek
-        int e = 0;//koniec
+        //start i end są indeksami i opisują obsza między maksimami
+        int start = 0;//poczatek
+        int end = 0;//koniec
         envelope[0] = x[0];
         for (int i = 1; i < x.length - 1; i++) {
             //szukamy maximum
             if (x[i] >= x[i - 1] && x[i] >= x[i + 1] && x[i] > 0) {
                 envelope[i] = x[i];
-                e = i;
-                //uzupełnienie wartości od p do e
-                for (int k = 1; k <= e - p; k++) {
-                    envelope[p + k] = x[p] + k * (x[e] - x[p]) / (e - p);
+                end = i;
+                //uzupełnienie wartości od start do end
+                for (int k = 1; k <= end - start; k++) {
+                    envelope[start + k] = x[start] + k * (x[end] - x[start]) / (end - start);
                 }
-                p = e;
+                start = end;
             }
         }
         //Teraz możliwe że fragment od ostatniego maksimum do kończa nie jest wypełniony
         //trzeba to naprawić
-        for (int k = 1; k < x.length - e; k++) {
-            envelope[e + k] = x[e] + k * (x[x.length - 1] - x[e]) / (x.length - e);
+        for (int k = 1; k < x.length - end; k++) {
+            envelope[end + k] = x[end] + k * (x[x.length - 1] - x[end]) / (x.length - end);
         }
         return envelope;
     }
 
 
     /**
-     *
-     * @param x
+     * Funkcja realizuje połączenie filtr pasmoprzepustowy jako
+     * połączenie szeregowe filtru dolno i górno przepustowego
+     * @param x sygnał
      * @param lowFreq
      * @param highFreq
      * @return
@@ -129,13 +101,9 @@ public class Vocoder {
 
 
     /**
-     * Uzupełnij komentarz ok? I używaj skrótu do formatowania kodu, bo się
-     * tym chwaliłeś i nadal nie używasz, chociaż jest lepiej :)... tak wiem
-     * kod pisany na szybko i w ogóle, ale trace czas, który mógłbym
-     * poświęcić na BRACHISTOCOŚTAM
-     *
-     * @param sound
-     * @param envelope
+     * "Nałożenie" obwiedni głosu na sygnał nośnej
+     * @param sound - sygnał nowej nosnej
+     * @param envelope - obwiednia
      * @return
      */
     public int[] join(int[] sound, int[] envelope) {
@@ -144,6 +112,8 @@ public class Vocoder {
         for (int i = 0; i < voice.length; i++) {
             if (k >= sound.length)
                 k = 0;
+
+            //To chyba nie jest za dobre podejście na połączenie obwiedni z sygnałem
             output[i] = (int) (sound[k++] * envelope[i] / 32767.0);
         }
         return output;
@@ -151,8 +121,6 @@ public class Vocoder {
 
     /*
      * Główna funkcja odpowiada za efekt vocodera
-     *
-     * Na razie sound (nowy dźwięk nosnej powinien byćtej samej długości co voice)
      */
     public int[] vocoder() {
         Mixer mixer = new Mixer();
@@ -166,10 +134,16 @@ public class Vocoder {
             int highFreq = highFrequTable[i];
             int[] v = bandPassFilter(voice, lowFrequ, highFreq);
 
-            // CO TO JEST TA PĘTLA?
+ 
             //testPlay(v);
             //Obliczamy obwiednię głosu (w danym paśmie)
+
+            //Ta metoda nie jest chyba najlepiej wykonana
             int[] envelope = getEnvelope(v);
+
+            //Obliczenia w pętli mają na celu "wygładzenie" obwiedni
+            //(ilość iteracji powinna zostać dobrana eksperymentalnie)
+
             for (int k = 0; k < 1; k++) {
                 envelope = getEnvelope(envelope);
             }
@@ -182,8 +156,8 @@ public class Vocoder {
             int[] outputVocoded = join(s, envelope);
             //testPlay(s);
 
-            //testPlay(s);
-
+ 
+            //synteza nowych sygnałów
             if (i == 0) {
                 mixer.putSignal(outputVocoded);
             } else {
@@ -211,7 +185,8 @@ public class Vocoder {
     }
 
     /**
-     *
+     *Filtr pasmowy oparty o FFT
+     *<b>NIE DZIAŁA</b>
      * @param x
      * @param lowFreq
      * @param highFreq
@@ -260,9 +235,8 @@ public class Vocoder {
 
     
     /**
-     * Funkcja tylko testująca wewnątrz programu - domyśliłem się ;)
-     * Rób komentarze do nietypowych rzeczy a najlepiej do wszystkich, jeśli
-     * robimy razem.
+     * Funkcja pozwalająca na odsłuch analizowanych fragmentów, w celu
+     * dokonania obiektywnej oceny działania programu przez urzytkownika.
      *
      * @param sound
      */
