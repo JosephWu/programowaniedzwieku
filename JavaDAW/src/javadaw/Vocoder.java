@@ -4,6 +4,8 @@
  */
 package javadaw;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Stach
@@ -112,6 +114,8 @@ public class Vocoder {
         //Teraz filtrujemy pokolej sygnał filtrami pasmo przepustowymi
         for (int i = 0; i < passes; i++) {
             int[] v = bandPassFilter(voice, lowPassFreq + i * (highPassFreq - lowPassFreq) / passes, lowPassFreq + (i + 1) * (highPassFreq - lowPassFreq) / passes);
+
+            //testPlay(v);
             //Obliczamy obwiednię głosu (w danym paśmie)
             int[] envelopeTop = getEnvelopeTop(v);
             int[] envelopeBottom = getEnvelopeBottom(v);
@@ -133,12 +137,56 @@ public class Vocoder {
 
     public void setSound(int[] sound) {
         this.sound = sound;
-        
+
     }
 
     public void setVoice(int[] voice) {
         this.voice = voice;
     }
 
+    public int[] bandPassFilterFFT(int[] x, int lowFreq, int highFreq) {
+        int blockSize = 512;
+        Complex[] s = new Complex[x.length];
+        for (int i = 0; i < s.length; i++) {
+            s[i] = new Complex(x[i], 0);
+        }
+        int resolution = 44100 / blockSize;
+        for (int i = 0; i < s.length / blockSize; i++) {
+            Complex[] tmp = Arrays.copyOfRange(s, i * 512, (i + 1) * 512);
+            tmp = new DFT().fft(tmp);
+            //teraz wycięcie odpowiedniego pasma
+            int l = lowFreq / resolution;
+            int r = highFreq / resolution;
 
+            //wycinanie pasma
+            for (int k = 0; k < l; k++) {
+                tmp[k] = new Complex(0, 0);
+            }
+            for (int k = r; k < tmp.length; k++) {
+                tmp[k] = new Complex(0, 0);
+            }
+            //
+            tmp = new DFT().ifft(tmp);
+
+            //przypisanie nowych (przefiltrowanych) wartosci
+            int m=0;
+            for (int k = i * blockSize; k < (i + 1) * blockSize; k++) {
+                s[k] = tmp[m++];
+            }
+        }
+        //Powrót z Complex do int
+        int[] y = new int[x.length];
+        for (int i = 0; i < y.length; i++) {
+            y[i] = (int) s[i].getRe();
+        }
+
+        return y;
+    }
+
+    private void testPlay(int[] sound){
+        JavaSound javaSound = new JavaSound();
+        javaSound.createSound();
+        javaSound.putIntData(sound);
+        javaSound.playSound();
+    }
 }
