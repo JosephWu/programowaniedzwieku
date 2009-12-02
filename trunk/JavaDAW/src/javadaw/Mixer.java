@@ -36,7 +36,7 @@ public class Mixer {
      */
     public void addSignal(int[] values) {
         for (int i = 0; i < signal.length; i++) {
-            signal[i] = (signal[i] + values[i]) / 2;
+            signal[i] = (signal[i] + values[i]);
         }
     }
 
