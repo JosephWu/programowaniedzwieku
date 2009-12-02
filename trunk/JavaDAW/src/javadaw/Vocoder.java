@@ -139,12 +139,14 @@ public class Vocoder {
      * @return
      */
     public int[] join(int[] sound, int[] envelope) {
-        int[] s = new int[sound.length];
+        int[] output = new int[sound.length];
+        int k = 0;
         for (int i = 0; i < voice.length; i++) {
-            
-            s[i] = (int) (sound[i] * envelope[i] / 32767.0);
+            if (k >= sound.length)
+                k = 0;
+            output[i] = (int) (sound[k++] * envelope[i] / 32767.0);
         }
-        return s;
+        return output;
     }
 
     /*
@@ -168,19 +170,20 @@ public class Vocoder {
                 envelope = getEnvelope(envelope);
             }
 
-
             //filtrujemy nową nośną
-            int[] s = bandPassFilter(sound, lowPassFreq + i * (highPassFreq - lowPassFreq) / passes, lowPassFreq + (i + 1) * (highPassFreq - lowPassFreq) / passes);
+            int[] s = bandPassFilter(sound, lowFrequ, highFreq);
 
-            s = join(s, envelope);
+            // envelope powstał z wokalu, więc on jest dla nas wyznacznikiem,
+            // a s albo musi byc odpowiednio dlugie, albo zostac powielone
+            int[] outputVocoded = join(s, envelope);
             //testPlay(s);
 
             //testPlay(s);
 
             if (i == 0) {
-                mixer.putSignal(s);
+                mixer.putSignal(outputVocoded);
             } else {
-                mixer.addSignal(s);
+                mixer.addSignal(outputVocoded);
             }
         }
 
