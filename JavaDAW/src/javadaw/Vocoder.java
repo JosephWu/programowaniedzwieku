@@ -186,8 +186,8 @@ public class Vocoder {
                 mixer.addSignal(outputVocoded);
             }
         }
-
-        return mixer.getOutput();
+        Ampli ampli = new Ampli();
+        return ampli.normalizeSingal(mixer.getOutput());
     }
 
     /**
