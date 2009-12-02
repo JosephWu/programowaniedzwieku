@@ -157,6 +157,10 @@ public class Vocoder {
     public int[] vocoder() {
         Mixer mixer = new Mixer();
         //Teraz filtrujemy pokolej sygnał filtrami pasmo przepustowymi
+        int[] lowFrequTable = {25, 100, 200, 400, 800, 1600, 3200, 6400, 12800};
+        int[] highFrequTable = {50, 200, 400, 800, 1600, 3200, 6400, 12800, 25600};
+        passes = 9;
+
         for (int i = 0; i < passes; i++) {
             int lowFrequ = lowPassFreq + i * (highPassFreq - lowPassFreq) / passes;
             int highFreq = lowPassFreq + (i + 1) * (highPassFreq - lowPassFreq) / passes;
