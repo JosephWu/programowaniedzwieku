@@ -14,9 +14,9 @@ public class Vocoder {
 
     double q = 1;//rezonans (do filtrów)
     //Krańce pasma w którym działa vocoder
-    int lowPassFreq = 500;
-    int highPassFreq = 3500;
-    int passes = 10;//liczba rozpatrywanych pasm
+    int lowPassFreq = 20;
+    int highPassFreq = 10000;
+    int passes = 32;//liczba rozpatrywanych pasm
     OneSound oneSound;
     int[] voice;
     int[] sound;
@@ -24,7 +24,7 @@ public class Vocoder {
     /*
      * Funkcja zwaraca obwiednię sygnału
      */
-    public static int[] getEnvelopeTop(int[] x) {
+    public static int[] getEnvelope(int[] x) {
         int[] envelope = new int[x.length];
 
 
@@ -52,33 +52,7 @@ public class Vocoder {
         return envelope;
     }
 
-    public static int[] getEnvelopeBottom(int[] x) {
-        int[] envelope = new int[x.length];
 
-
-        //p i e są indeksami i opisują obsza między maksimami
-        int p = 0;//poczatek
-        int e = 0;//koniec
-        envelope[0] = x[0];
-        for (int i = 1; i < x.length - 1; i++) {
-            //szukamy maximum
-            if (x[i] <= x[i - 1] && x[i] <= x[i + 1] && x[i] < 0) {
-                envelope[i] = x[i];
-                e = i;
-                //uzupełnienie wartości od p do e
-                for (int k = 1; k <= e - p; k++) {
-                    envelope[p + k] = x[p] + k * (x[e] - x[p]) / (e - p);
-                }
-                p = e;
-            }
-        }
-        //Teraz możliwe że fragment od ostatniego maksimum do kończa nie jest wypełniony
-        //trzeba to naprawić
-        for (int k = 1; k < x.length - e; k++) {
-            envelope[e + k] = x[e] + k * (x[x.length - 1] - x[e]) / (x.length - e);
-        }
-        return envelope;
-    }
 
     public int[] bandPassFilter(int[] x, int lowFreq, int highFreq) {
         int[] y = Filters.lowPassFillter(x, highFreq, q);
@@ -86,19 +60,12 @@ public class Vocoder {
         return y;
     }
 
-    public int[] join(int[] sound, int[] envelopeTop, int[] envelopeBottom) {
+    public int[] join(int[] sound, int[] envelope) {
         int[] s = new int[sound.length];
 
         for (int i = 0; i < voice.length; i++) {
-            if (sound[i] > envelopeTop[i]) {
-                s[i] = envelopeTop[i];
-                continue;
-            }
-            if (sound[i] < envelopeBottom[i]) {
-                s[i] = envelopeBottom[i];
-                continue;
-            }
-            s[i] = sound[i];
+            
+            s[i] = (int) (sound[i] * envelope[i] / 32767.0);
         }
 
         return s;
@@ -117,13 +84,19 @@ public class Vocoder {
 
             //testPlay(v);
             //Obliczamy obwiednię głosu (w danym paśmie)
-            int[] envelopeTop = getEnvelopeTop(v);
-            int[] envelopeBottom = getEnvelopeBottom(v);
+            int[] envelope = getEnvelope(v);
+            for (int k = 0; k < 10; k++) {
+                envelope = getEnvelope(envelope);
+            }
+
 
             //filtrujemy nową nośną
             int[] s = bandPassFilter(sound, lowPassFreq + i * (highPassFreq - lowPassFreq) / passes, lowPassFreq + (i + 1) * (highPassFreq - lowPassFreq) / passes);
 
-            s = join(s, envelopeTop, envelopeBottom);
+            s = join(s, envelope);
+            //testPlay(s);
+
+            //testPlay(s);
 
             if (i == 0) {
                 mixer.putSignal(s);
@@ -161,15 +134,17 @@ public class Vocoder {
             //wycinanie pasma
             for (int k = 0; k < l; k++) {
                 tmp[k] = new Complex(0, 0);
+                tmp[tmp.length - k - 1] = new Complex(0, 0);
             }
-            for (int k = r; k < tmp.length; k++) {
+            for (int k = r; k < tmp.length / 2; k++) {
                 tmp[k] = new Complex(0, 0);
+                tmp[k + blockSize / 2 - 1] = new Complex(0, 0);
             }
             //
             tmp = new DFT().ifft(tmp);
 
             //przypisanie nowych (przefiltrowanych) wartosci
-            int m=0;
+            int m = 0;
             for (int k = i * blockSize; k < (i + 1) * blockSize; k++) {
                 s[k] = tmp[m++];
             }
@@ -183,7 +158,7 @@ public class Vocoder {
         return y;
     }
 
-    private void testPlay(int[] sound){
+    private void testPlay(int[] sound) {
         JavaSound javaSound = new JavaSound();
         javaSound.createSound();
         javaSound.putIntData(sound);
