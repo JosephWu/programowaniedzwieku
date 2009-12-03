@@ -14,6 +14,8 @@ public class SoundGenerator {
     public static final int TRIANGLE_WAVE = 4;
     public static final int NOISE_WAVE = 5;
     public static final int COSSINUS_WAVE = 6;
+    public static final int SQUARE_SIMPLE_WAVE = 7;
+
 
     public SoundGenerator() {
     }
@@ -37,9 +39,11 @@ public class SoundGenerator {
                     tmp = (Math.sin(2.0*Math.PI*(double)t*(double)frequency/44100.0));
                     break;
                 case SoundGenerator.SQUARE_WAVE:
-//                    for (int k = 1; k < n; k++) {
-//                        tmp += (Math.sin((2.0*k-1)*2.0*Math.PI*(double)frequency*(double)t/44100.0)/(2.0*k-1));
-//                    }
+                    for (int k = 1; k < n; k++) {
+                        tmp += (Math.sin((2.0*k-1)*2.0*Math.PI*(double)frequency*(double)t/44100.0)/(2.0*k-1));
+                    }
+                    break;
+                case SoundGenerator.SQUARE_SIMPLE_WAVE:
                     tmp = Math.signum(Math.sin(2.0*Math.PI*frequency*(double)t/44100.0));
                     break;
                 case SoundGenerator.SAWTOOTH_WAVE:
