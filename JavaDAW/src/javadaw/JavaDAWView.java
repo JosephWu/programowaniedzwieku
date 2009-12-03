@@ -936,7 +936,7 @@ public class JavaDAWView extends FrameView {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         Effects effects = new Effects();
-        int freq = Integer.parseInt(this.jTextFieldfrequency.getText());
+        double freq = Double.parseDouble(this.jTextFieldfrequency.getText());
         boolean wah = this.jCheckBoxWahwah.isSelected();
         int k = Integer.parseInt(this.jTextFieldKWave.getText());
         int wahParam = Integer.parseInt(this.jTextFieldWahWahParam.getText());

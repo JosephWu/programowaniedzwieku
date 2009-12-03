@@ -6,7 +6,7 @@ package javadaw;
  */
 public class Effects {
 
-    public void getOneSimpleEffect(int freqency, int k, boolean[] on,
+    public void getOneSimpleEffect(double freqency, int k, boolean[] on,
             boolean wahwah, int wahwahParam) {
         SoundGenerator sg = new SoundGenerator();
         JavaSound javaSound = new JavaSound();
