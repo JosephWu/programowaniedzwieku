@@ -139,13 +139,13 @@ public class Vocoder {
             //Obliczenia w pętli mają na celu "wygładzenie" obwiedni
             //(ilość iteracji powinna zostać dobrana eksperymentalnie)
 
-            for (int k = 0; k < 0; k++) {
+            for (int k = 0; k < 2; k++) {
                 envelope = getEnvelope(envelope);
             }
 
             //Generacja nośnej (w tym wypadku piły)
             int[] s = new SoundGenerator().generateSound(
-                    SoundGenerator.SQUARE_WAVE, v.length, 500, 20);
+                    SoundGenerator.SQUARE_WAVE, v.length, (int)(lowFrequ), 10);
 
             // envelope powstał z wokalu, więc on jest dla nas wyznacznikiem,
             // a s albo musi byc odpowiednio dlugie, albo zostac powielone
