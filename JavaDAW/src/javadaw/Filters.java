@@ -31,6 +31,9 @@ public class Filters {
         for (int i = 2; i < x.length; i++) {
             y[i] = (int) (a0 * x[i] + a1 * x[i - 1] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
+        //Pierwsze dwa są te same
+        y[0] = y[2];
+        y[1] = y[2];
         return y;
     }
 
@@ -60,6 +63,8 @@ public class Filters {
         for (int i = 2; i < x.length; i++) {
             y[i] = (int) (a0 * x[i] + a1 * x[i - 1] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
+        y[0] = y[2];
+        y[1] = y[2];
         return y;
     }
 
@@ -88,6 +93,8 @@ public class Filters {
         for (int i = 2; i < x.length; i++) {
             y[i] = (int) (a0 * x[i] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
+        y[0] = y[2];
+        y[1] = y[2];
         return y;
     }
 }
