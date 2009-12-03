@@ -24,7 +24,7 @@ public class SoundGenerator {
      * Funkcja do generowania różnych typów sygnału:
      * @param 1-sinus, 2-prostokąt, 3-piła, 4-trójkąt
      */
-    public int[] generateSound(int type, int length, int frequency, int n) {
+    public int[] generateSound(int type, int length, double frequency, int n) {
         int[] val = new int[length];
         double[] tmpVals = new double[length];
         double max = 0;
@@ -33,14 +33,14 @@ public class SoundGenerator {
             double tmp = 0;
             switch (type) {
                 case SoundGenerator.SINUS_WAVE:
-                    tmp = (Math.sin(2.0*Math.PI*(double)t*(double)frequency/44100.0));
+                    tmp = (Math.sin(2.0*Math.PI*(double)t*frequency/44100.0));
                     break;
                 case SoundGenerator.COSSINUS_WAVE:
-                    tmp = (Math.sin(2.0*Math.PI*(double)t*(double)frequency/44100.0));
+                    tmp = (Math.sin(2.0*Math.PI*(double)t*frequency/44100.0));
                     break;
                 case SoundGenerator.SQUARE_WAVE:
                     for (int k = 1; k < n; k++) {
-                        tmp += (Math.sin((2.0*k-1)*2.0*Math.PI*(double)frequency*(double)t/44100.0)/(2.0*k-1));
+                        tmp += (Math.sin((2.0*k-1)*2.0*Math.PI*frequency*(double)t/44100.0)/(2.0*k-1));
                     }
                     break;
                 case SoundGenerator.SQUARE_SIMPLE_WAVE:
@@ -48,12 +48,12 @@ public class SoundGenerator {
                     break;
                 case SoundGenerator.SAWTOOTH_WAVE:
                     for (int k = 1; k < n; k++) {
-                        tmp += ((Math.sin(2.0*(double)k*Math.PI*(double)frequency*(double)t/44100.0))/(double)k);
+                        tmp += ((Math.sin(2.0*(double)k*Math.PI*frequency*(double)t/44100.0))/(double)k);
                     }
                     break;
                 case SoundGenerator.TRIANGLE_WAVE:
                     for (int k = 0; k < n; k++) {
-                        tmp += ((Math.pow(-1, k)*(Math.sin(2.0*Math.PI*(2.0*k+1)*(double)frequency*(double)t/44100.0))/((2.0*k+1)*(2.0*k+1))));
+                        tmp += ((Math.pow(-1, k)*(Math.sin(2.0*Math.PI*(2.0*k+1)*frequency*(double)t/44100.0))/((2.0*k+1)*(2.0*k+1))));
                     }
                     break;
                 case SoundGenerator.NOISE_WAVE:
