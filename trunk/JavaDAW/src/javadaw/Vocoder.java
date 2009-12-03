@@ -145,7 +145,7 @@ public class Vocoder {
 
             //Generacja nośnej (w tym wypadku piły)
             int[] s = new SoundGenerator().generateSound(
-                    SoundGenerator.SQUARE_WAVE, v.length, (int)(lowFrequ), 10);
+                    SoundGenerator.SQUARE_SIMPLE_WAVE, v.length, (int)(lowFrequ), 10);
 
             // envelope powstał z wokalu, więc on jest dla nas wyznacznikiem,
             // a s albo musi byc odpowiednio dlugie, albo zostac powielone
