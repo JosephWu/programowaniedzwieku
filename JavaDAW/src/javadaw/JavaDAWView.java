@@ -939,7 +939,7 @@ public class JavaDAWView extends FrameView {
         double freq = Double.parseDouble(this.jTextFieldfrequency.getText());
         boolean wah = this.jCheckBoxWahwah.isSelected();
         int k = Integer.parseInt(this.jTextFieldKWave.getText());
-        int wahParam = Integer.parseInt(this.jTextFieldWahWahParam.getText());
+        double wahParam = Double.parseDouble(this.jTextFieldWahWahParam.getText());
         boolean[] on = new boolean[4];
         on[0] = this.jCheckBoxSinus.isSelected();
         on[1] = this.jCheckBoxSquare.isSelected();
