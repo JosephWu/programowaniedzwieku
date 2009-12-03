@@ -105,14 +105,14 @@ public class Effects {
         int[] all = {0};
 
         int[] tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.4), 392, 55);
+                (int) (44100 * 0.4), 391.9, 55);
         Mixer mixer = new Mixer();
         mixer.putSignal(tmp);
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 196, 55);
+                (int) (44100 * 0.4), 195.95, 55);
         mixer.addSignal(tmp);
         tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 784, 55), 2);
+                (int) (44100 * 0.4), 783.8, 55), 2);
         mixer.addSignal(tmp);
         Ampli ampli = new Ampli();
         all = ampli.normalizeSingal(mixer.getOutput());
@@ -120,14 +120,14 @@ public class Effects {
 
 
         tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.4), 330, 45);
+                (int) (44100 * 0.4), 329.6, 45);
         mixer = new Mixer();
         mixer.putSignal(tmp);
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 165, 45);
+                (int) (44100 * 0.4), 164.8, 45);
         mixer.addSignal(tmp);
         tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 660, 45), 2);
+                (int) (44100 * 0.4), 659.2, 45), 2);
         mixer.addSignal(tmp);
         ampli = new Ampli();
         tmp = ampli.normalizeSingal(mixer.getOutput());
@@ -135,30 +135,14 @@ public class Effects {
 
 
         tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.4), 330, 45);
+                (int) (44100 * 0.4), 329.6, 45);
         mixer = new Mixer();
         mixer.putSignal(tmp);
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 165, 45);
+                (int) (44100 * 0.4), 164.8, 45);
         mixer.addSignal(tmp);
         tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 660, 45), 2);
-        mixer.addSignal(tmp);
-        ampli = new Ampli();
-        tmp = ampli.normalizeSingal(mixer.getOutput());
-        all = concat(all, tmp);
-
-
-
-        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.4), 350, 55);
-        mixer = new Mixer();
-        mixer.putSignal(tmp);
-        tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 175, 55);
-        mixer.addSignal(tmp);
-        tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 700, 55), 2);
+                (int) (44100 * 0.4), 659.2, 45), 2);
         mixer.addSignal(tmp);
         ampli = new Ampli();
         tmp = ampli.normalizeSingal(mixer.getOutput());
@@ -167,14 +151,14 @@ public class Effects {
 
 
         tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.4), 294, 45);
+                (int) (44100 * 0.4), 349.6, 55);
         mixer = new Mixer();
         mixer.putSignal(tmp);
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 147, 45);
+                (int) (44100 * 0.4), 174.8, 55);
         mixer.addSignal(tmp);
         tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 588, 55), 2);
+                (int) (44100 * 0.4), 699.2, 55), 2);
         mixer.addSignal(tmp);
         ampli = new Ampli();
         tmp = ampli.normalizeSingal(mixer.getOutput());
@@ -183,14 +167,14 @@ public class Effects {
 
 
         tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.4), 294, 55);
+                (int) (44100 * 0.4), 293.7, 45);
         mixer = new Mixer();
         mixer.putSignal(tmp);
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 147, 55);
+                (int) (44100 * 0.4), 146.85, 45);
         mixer.addSignal(tmp);
         tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 588, 55), 2);
+                (int) (44100 * 0.4), 587.4, 55), 2);
         mixer.addSignal(tmp);
         ampli = new Ampli();
         tmp = ampli.normalizeSingal(mixer.getOutput());
@@ -199,14 +183,14 @@ public class Effects {
 
 
         tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.2), 262, 75);
+                (int) (44100 * 0.4), 293.7, 55);
         mixer = new Mixer();
         mixer.putSignal(tmp);
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 131, 75);
+                (int) (44100 * 0.4), 146.85, 55);
         mixer.addSignal(tmp);
         tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 524, 55), 2);
+                (int) (44100 * 0.4), 587.4, 55), 2);
         mixer.addSignal(tmp);
         ampli = new Ampli();
         tmp = ampli.normalizeSingal(mixer.getOutput());
@@ -215,14 +199,30 @@ public class Effects {
 
 
         tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.2), 330, 55);
+                (int) (44100 * 0.2), 261.6, 75);
         mixer = new Mixer();
         mixer.putSignal(tmp);
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 165, 55);
+                (int) (44100 * 0.4), 130.8, 75);
         mixer.addSignal(tmp);
         tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 660, 55), 2);
+                (int) (44100 * 0.4), 523.2, 55), 2);
+        mixer.addSignal(tmp);
+        ampli = new Ampli();
+        tmp = ampli.normalizeSingal(mixer.getOutput());
+        all = concat(all, tmp);
+
+
+
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.2), 329.6, 55);
+        mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
+                (int) (44100 * 0.4), 164.8, 55);
+        mixer.addSignal(tmp);
+        tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
+                (int) (44100 * 0.4), 659.2, 55), 2);
         mixer.addSignal(tmp);
         ampli = new Ampli();
         tmp = ampli.normalizeSingal(mixer.getOutput());
@@ -231,14 +231,14 @@ public class Effects {
 
         
         tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
-                (int) (44100 * 0.4), 392, 45);
+                (int) (44100 * 0.4), 391.9, 45);
         mixer = new Mixer();
         mixer.putSignal(tmp);
         tmp = sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 196, 45);
+                (int) (44100 * 0.4), 195.95, 45);
         mixer.addSignal(tmp);
         tmp = this.wahwah(sg.generateSound(SoundGenerator.SQUARE_WAVE,
-                (int) (44100 * 0.4), 784, 55), 2);
+                (int) (44100 * 0.4), 783.8, 55), 2);
         mixer.addSignal(tmp);
         ampli = new Ampli();
         tmp = ampli.normalizeSingal(mixer.getOutput());
