@@ -269,7 +269,7 @@ public class Effects {
      */
     public int[] wahwah(int[] x, int lf) {
 
-        int f = 500;
+        int f = 1500;
         double q = 2;
         int[] y = new int[x.length];
 
@@ -302,6 +302,19 @@ public class Effects {
             //
             y[i] = (int) (a0 * x[i] + a1 * x[i - 1] + a2 * x[i - 2] - b1 * y[i - 1] - b2 * y[i - 2]);
         }
+        y[0]=0;
+        y[1]=0;
+
+        return y;
+    }
+
+    public int[] tremolo(int[] x,int lf){
+        int[] y=new int[x.length];
+        int[] lfo = new SoundGenerator().generateSound(SoundGenerator.SINUS_WAVE, x.length, lf, 1);
+        for (int i = 0; i < y.length; i++) {
+        y[i]=lfo[i]*x[i]/32767;
+        }
+
         return y;
     }
 }
