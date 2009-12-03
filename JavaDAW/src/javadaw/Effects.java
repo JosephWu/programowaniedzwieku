@@ -7,12 +7,13 @@ package javadaw;
 public class Effects {
 
     public void getOneSimpleEffect(double freqency, int k, boolean[] on,
-            boolean wahwah, double wahwahParam) {
+            boolean wahwah, double wahwahParam, double tremoloParam) {
         SoundGenerator sg = new SoundGenerator();
         JavaSound javaSound = new JavaSound();
         javaSound.createSound();
         int[] tmp = {0};
         Mixer mixer = new Mixer();
+        boolean tremolo = on[4];
 
         if (on[0]) {
             tmp = sg.generateSound(SoundGenerator.SINUS_WAVE,
@@ -53,6 +54,9 @@ public class Effects {
 
         if (wahwah) {
             tmp = this.wahwah(tmp, wahwahParam, freqency/2.0);
+        }
+        if (tremolo) {
+            tmp = this.tremolo(tmp, tremoloParam);
         }
         mixer.addSignal(tmp);
 
@@ -307,12 +311,160 @@ public class Effects {
         return y;
     }
 
-    public int[] tremolo(int[] x, int lf) {
+    public int[] tremolo(int[] x, double lf) {
         int[] y = new int[x.length];
         int[] lfo = new SoundGenerator().generateSound(SoundGenerator.SINUS_WAVE, x.length, lf, 1);
         for (int i = 0; i < y.length; i++) {
-            y[i] = lfo[i] * x[i] / 32767;
+            y[i] = (int)((double)lfo[i] * (double)x[i] / 32767.0);
         }
         return y;
+    }
+
+
+
+
+
+    public void getSimpleEffectSecond() {
+        SoundGenerator sg = new SoundGenerator();
+        JavaSound javaSound = new JavaSound();
+        javaSound.createSound();
+        int[] all = {0};
+
+        int[] tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 391.9, 25);
+        Mixer mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.4), 195.95, 25);
+        tmp = this.tremolo(tmp, 0.5);
+        mixer.addSignal(tmp);
+        Ampli ampli = new Ampli();
+        all = ampli.normalizeSingal(mixer.getOutput());
+
+
+
+        tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 329.6, 25);
+        mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.4), 164.8, 25);
+        mixer.addSignal(tmp);
+        tmp = this.tremolo(tmp, 0.5);
+        mixer.addSignal(tmp);
+        ampli = new Ampli();
+        tmp = ampli.normalizeSingal(mixer.getOutput());
+        all = concat(all, tmp);
+
+
+        tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 329.6, 25);
+        mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.4), 164.8, 25);
+        mixer.addSignal(tmp);
+        tmp = this.tremolo(tmp, 0.5);
+        mixer.addSignal(tmp);
+        ampli = new Ampli();
+        tmp = ampli.normalizeSingal(mixer.getOutput());
+        all = concat(all, tmp);
+
+
+
+        tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 349.6, 25);
+        mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.4), 174.8, 25);
+        mixer.addSignal(tmp);
+        tmp = this.tremolo(tmp, 0.5);
+        mixer.addSignal(tmp);
+        ampli = new Ampli();
+        tmp = ampli.normalizeSingal(mixer.getOutput());
+        all = concat(all, tmp);
+
+
+
+        tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 293.7, 25);
+        mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.4), 146.85, 25);
+        mixer.addSignal(tmp);
+        tmp = this.tremolo(tmp, 0.5);
+        mixer.addSignal(tmp);
+        ampli = new Ampli();
+        tmp = ampli.normalizeSingal(mixer.getOutput());
+        all = concat(all, tmp);
+
+
+
+        tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 293.7, 25);
+        mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.4), 146.85, 25);
+        mixer.addSignal(tmp);
+        tmp = this.tremolo(tmp, 0.5);
+        mixer.addSignal(tmp);
+        ampli = new Ampli();
+        tmp = ampli.normalizeSingal(mixer.getOutput());
+        all = concat(all, tmp);
+
+
+
+        tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.2), 261.6, 25);
+        mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.4), 130.8, 25);
+        mixer.addSignal(tmp);
+        tmp = this.tremolo(tmp, 0.5);
+        mixer.addSignal(tmp);
+        ampli = new Ampli();
+        tmp = ampli.normalizeSingal(mixer.getOutput());
+        all = concat(all, tmp);
+
+
+
+        tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.2), 329.6, 25);
+        mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.4), 164.8, 25);
+        mixer.addSignal(tmp);
+        tmp = this.tremolo(tmp, 0.5);
+        mixer.addSignal(tmp);
+        ampli = new Ampli();
+        tmp = ampli.normalizeSingal(mixer.getOutput());
+        all = concat(all, tmp);
+
+
+
+        tmp = sg.generateSound(SoundGenerator.TRIANGLE_WAVE,
+                (int) (44100 * 0.4), 391.9, 25);
+        mixer = new Mixer();
+        mixer.putSignal(tmp);
+        tmp = sg.generateSound(SoundGenerator.SAWTOOTH_WAVE,
+                (int) (44100 * 0.4), 195.95, 25);
+        mixer.addSignal(tmp);
+        tmp = this.tremolo(tmp, 0.5);
+        mixer.addSignal(tmp);
+        ampli = new Ampli();
+        tmp = ampli.normalizeSingal(mixer.getOutput());
+        all = concat(all, tmp);
+
+        //all = this.wahwah(all, 2);
+
+        javaSound.putIntData(all);
+        javaSound.playSound();
+        //javaSound.stopSound();
+
     }
 }
