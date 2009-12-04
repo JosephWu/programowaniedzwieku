@@ -294,7 +294,7 @@ public class Effects {
         for (int i = 2; i < x.length; i++) {
             //Teraz działanie LFO
             s = Math.sin(Math.PI * 2.0 * f * (Math.abs(lfo[i]/32767.0)) / 44100.0);
-            Math.cos(Math.PI * 2.0 * f * (Math.abs(lfo[i]/32767.0)) / 44100.0);
+            c = Math.cos(Math.PI * 2.0 * f * (Math.abs(lfo[i]/32767.0)) / 44100.0);
             alfa = s / (2.0 * q);
             r = 1.0 / (1.0 + alfa);
             a0 = 0.5 * (1.0 + c) * r;
